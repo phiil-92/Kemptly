@@ -1,0 +1,74 @@
+<UserControl x:Class="WinTidy.Views.ServicesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WinTidy.Views">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Services" Style="{StaticResource PageTitle}"/>
+            <TextBlock Style="{StaticResource Subtle}"
+                       Text="Background services start without a window. Set ones you don't need (updaters, launchers, helpers) to Manual or Disabled. Windows services are hidden by default so you don't break anything."/>
+        </StackPanel>
+
+        <WrapPanel Grid.Row="1" Style="{StaticResource Toolbar}">
+            <TextBox x:Name="SearchBox" Width="240" TextChanged="Filter_Changed" Margin="0,0,12,0" ToolTip="Filter by name"/>
+            <CheckBox x:Name="ShowMs" Content="Show Windows services" Click="Filter_Changed" VerticalAlignment="Center" Margin="0,0,12,0"/>
+            <CheckBox x:Name="OnlyAuto" Content="Only auto-starting" Click="Filter_Changed" VerticalAlignment="Center" Margin="0,0,12,0"/>
+            <Button Content="Refresh" Click="Refresh_Click" Padding="14,6"/>
+        </WrapPanel>
+
+        <DataGrid x:Name="SvcGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="None" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Service" Width="1.5*" SortMemberPath="DisplayName">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,6" ToolTip="{Binding Description}">
+                                <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding Name}" Style="{StaticResource Subtle}" FontSize="12"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90" ElementStyle="{StaticResource CellText}"/>
+                <DataGridTemplateColumn Header="Startup type" Width="190" SortMemberPath="StartType">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedItem="{Binding StartType, Mode=OneWay}"
+                                      ItemsSource="{x:Static local:ServicesPage.StartTypes}"
+                                      SelectionChanged="StartType_Changed" DropDownOpened="Combo_Opened"
+                                      VerticalAlignment="Center" MinWidth="170"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="2*" ElementStyle="{StaticResource CellText}"/>
+                <DataGridTemplateColumn Width="90" CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="StartStop_Click" Padding="8,2" FontSize="12" VerticalAlignment="Center">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Content" Value="Start"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                                <Setter Property="Content" Value="Stop"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock x:Name="StatusText" Grid.Row="3" Style="{StaticResource Subtle}" Margin="0,10,0,0"/>
+    </Grid>
+</UserControl>
