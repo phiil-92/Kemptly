@@ -257,26 +257,28 @@ public static class Cleaner
         var targets = c.Targets().ToList();
         foreach (var t in targets)
         {
+            var rootDir = t.IsFile ? System.IO.Path.GetDirectoryName(t.Path) : t.Path;
+            var resolvedRoot = rootDir != null && Directory.Exists(rootDir) ? Native.ResolveFolder(rootDir) : null;
+            if (resolvedRoot == null) continue;
+
             foreach (var f in TargetFiles(t, ct).ToList())
             {
                 try
                 {
                     long len = f.Length;
-                    if (f.IsReadOnly) f.IsReadOnly = false;
-                    f.Delete();
-                    freed += len;
-                    deleted++;
+                    if (Native.SafeDelete(f.FullName, resolvedRoot)) { freed += len; deleted++; }
+                    else failed++; // in use, access denied, or no longer inside the folder being cleaned
                 }
-                catch { failed++; } // in use or access denied
+                catch { failed++; }
             }
 
-            if (!t.IsFile && t.Recursive && t.RemoveEmptyDirs && Directory.Exists(t.Path))
-                RemoveEmptyDirs(t.Path);
+            if (!t.IsFile && t.Recursive && t.RemoveEmptyDirs)
+                RemoveEmptyDirs(t.Path, resolvedRoot);
         }
         return (freed, deleted, failed);
     }
 
-    static void RemoveEmptyDirs(string root)
+    static void RemoveEmptyDirs(string root, string resolvedRoot)
     {
         List<string> dirs;
         try
@@ -294,7 +296,7 @@ public static class Cleaner
         {
             try
             {
-                if (!Directory.EnumerateFileSystemEntries(d).Any()) Directory.Delete(d);
+                if (!Directory.EnumerateFileSystemEntries(d).Any()) Native.SafeDelete(d, resolvedRoot);
             }
             catch { }
         }

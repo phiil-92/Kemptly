@@ -1,4 +1,4 @@
-﻿name: Build installer
+name: Build installer
 
 # Builds Kemptly-Setup.msi + a portable exe.
 # Push a tag like v1.1.0 to create a GitHub release with both files attached,
@@ -15,16 +15,16 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
       - name: Build installer
         shell: pwsh
         run: |
-          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart('v') } else { "1.1.0" }
+          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart('v') } else { "1.1.1" }
           ./build-installer.ps1 -Version $v
 
       - name: Prepare files
@@ -34,7 +34,7 @@ jobs:
           Copy-Item dist/Kemptly-Setup.msi out/
           Copy-Item build/selfcontained/Kemptly.exe out/Kemptly-portable.exe
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: Kemptly
           path: out/*

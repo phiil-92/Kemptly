@@ -93,6 +93,54 @@ internal static class Native
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
     }
 
+    // ---- Handle-based delete (safe against junction/symlink swaps) ----
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string name, uint access, uint share,
+        IntPtr security, uint disposition, uint flags, IntPtr template);
+
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern uint GetFinalPathNameByHandle(Microsoft.Win32.SafeHandles.SafeFileHandle h, StringBuilder path, uint size, uint flags);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool SetFileInformationByHandle(Microsoft.Win32.SafeHandles.SafeFileHandle h, int infoClass, ref uint info, uint size);
+
+    const uint DELETE = 0x10000, FILE_READ_ATTRIBUTES = 0x80, SHARE_ALL = 7, OPEN_EXISTING = 3;
+    const uint FILE_FLAG_BACKUP_SEMANTICS = 0x02000000, FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000;
+
+    static string? FinalPath(Microsoft.Win32.SafeHandles.SafeFileHandle h)
+    {
+        var sb = new StringBuilder(1024);
+        uint n = GetFinalPathNameByHandle(h, sb, (uint)sb.Capacity, 0);
+        return n == 0 || n >= sb.Capacity ? null : sb.ToString();
+    }
+
+    /// <summary>Real location of a folder (all links resolved), e.g. \\?\C:\Windows\Temp.</summary>
+    public static string? ResolveFolder(string dir)
+    {
+        using var h = CreateFile(dir, FILE_READ_ATTRIBUTES, SHARE_ALL, IntPtr.Zero, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, IntPtr.Zero);
+        return h.IsInvalid ? null : FinalPath(h);
+    }
+
+    /// <summary>
+    /// Deletes a file (or empty folder) only if, after opening it, its real location is still inside
+    /// <paramref name="resolvedRoot"/>. Opening first and checking the handle means a folder swapped for a
+    /// junction mid-clean can't redirect the delete elsewhere (e.g. into System32).
+    /// </summary>
+    public static bool SafeDelete(string path, string resolvedRoot)
+    {
+        using var h = CreateFile(path, DELETE | FILE_READ_ATTRIBUTES, SHARE_ALL, IntPtr.Zero, OPEN_EXISTING,
+            FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, IntPtr.Zero);
+        if (h.IsInvalid) return false;
+        var real = FinalPath(h);
+        if (real == null || !real.StartsWith(resolvedRoot.TrimEnd('\\') + "\\", StringComparison.OrdinalIgnoreCase)) return false;
+
+        // FileDispositionInfoEx: delete + POSIX semantics + ignore read-only (Windows 10 1809+)
+        uint flags = 0x1 | 0x2 | 0x10;
+        if (SetFileInformationByHandle(h, 21, ref flags, 4)) return true;
+        uint delete = 1; // fallback: FileDispositionInfo
+        return SetFileInformationByHandle(h, 4, ref delete, 4);
+    }
+
     // ---- Network ----
     [DllImport("iphlpapi.dll")]
     public static extern uint GetExtendedTcpTable(IntPtr table, ref int size, bool order, int af, int tableClass, uint reserved);

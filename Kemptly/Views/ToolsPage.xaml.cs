@@ -74,9 +74,12 @@ public partial class ToolsPage : UserControl
         new("", "Restart Explorer", "Fixes a frozen taskbar, Start menu or desktop without rebooting.", "Restart", false, async () =>
         {
             foreach (var p in Process.GetProcessesByName("explorer")) { try { p.Kill(); } catch { } p.Dispose(); }
-            await Task.Delay(1500);
-            if (Process.GetProcessesByName("explorer").Length == 0) Process.Start("explorer.exe");
-            Log("Windows Explorer restarted.");
+            // Windows restarts the shell by itself, with normal rights. Starting it from here instead
+            // would give the desktop this app's rights, so when elevated we only wait for Windows.
+            for (int i = 0; i < 10 && Process.GetProcessesByName("explorer").Length == 0; i++) await Task.Delay(500);
+            if (Process.GetProcessesByName("explorer").Length > 0) Log("Windows Explorer restarted.");
+            else if (!Admin.IsAdmin) { Process.Start(Shell.SystemTool("explorer.exe")); Log("Windows Explorer restarted."); }
+            else Log("Explorer didn't come back on its own. Press Ctrl+Shift+Esc → Run new task → explorer.exe (leave 'administrative privileges' unticked).");
         }),
 
         new("", "Empty Recycle Bin", "Permanently removes everything in the Recycle Bin on all drives.", "Empty", false, () =>

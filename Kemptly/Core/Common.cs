@@ -104,17 +104,37 @@ public static class Shell
         }
     }
 
+    static readonly string WinDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+
+    /// <summary>
+    /// Resolves a Windows tool ("cmd.exe", "devmgmt.msc", ...) to its full path in the Windows folder.
+    /// Bare names would otherwise be searched for in the app's own (user-writable) folder first,
+    /// letting a planted fake run with this app's rights. URIs like "ms-settings:" pass through.
+    /// </summary>
+    public static string SystemTool(string name)
+    {
+        if (Path.IsPathRooted(name) || name.Contains(':')) return name;
+        if (!Path.HasExtension(name)) name += ".exe";
+        foreach (var dir in new[] { Environment.SystemDirectory, WinDir, Path.Combine(Environment.SystemDirectory, @"WindowsPowerShell\v1.0") })
+        {
+            var full = Path.Combine(dir, name);
+            if (File.Exists(full)) return full;
+        }
+        throw new FileNotFoundException($"Windows tool not found: {name}");
+    }
+
     public static void ShowInExplorer(string? path)
     {
         if (string.IsNullOrWhiteSpace(path)) return;
         try
         {
-            if (File.Exists(path)) Process.Start("explorer.exe", $"/select,\"{path}\"");
-            else if (Directory.Exists(path)) Process.Start("explorer.exe", $"\"{path}\"");
+            var explorer = SystemTool("explorer.exe");
+            if (File.Exists(path)) Process.Start(explorer, $"/select,\"{path}\"");
+            else if (Directory.Exists(path)) Process.Start(explorer, $"\"{path}\"");
             else
             {
                 var dir = Path.GetDirectoryName(path);
-                if (dir != null && Directory.Exists(dir)) Process.Start("explorer.exe", $"\"{dir}\"");
+                if (dir != null && Directory.Exists(dir)) Process.Start(explorer, $"\"{dir}\"");
                 else Ui.Info("That location no longer exists.");
             }
         }
@@ -123,7 +143,15 @@ public static class Shell
 
     public static void Open(string target, string? args = null)
     {
-        try { Process.Start(new ProcessStartInfo(target) { UseShellExecute = true, Arguments = args ?? "" }); }
+        try
+        {
+            Process.Start(new ProcessStartInfo(SystemTool(target))
+            {
+                UseShellExecute = true,
+                Arguments = args ?? "",
+                WorkingDirectory = Environment.SystemDirectory,
+            });
+        }
         catch (Exception ex) { Ui.Error($"Could not open {target}:\n{ex.Message}"); }
     }
 
@@ -144,9 +172,10 @@ public static class Shell
     public static async Task<RunResult> RunAsync(string file, string args, Encoding? encoding = null)
     {
         var enc = encoding ?? OemEncoding;
-        var psi = new ProcessStartInfo(file, args)
+        var psi = new ProcessStartInfo(SystemTool(file), args)
         {
             UseShellExecute = false,
+            WorkingDirectory = Environment.SystemDirectory,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             CreateNoWindow = true,
@@ -163,9 +192,11 @@ public static class Shell
     /// <summary>Runs a program elevated (UAC prompt if needed). Returns exit code, 0 for visible windows, -2 if cancelled.</summary>
     public static async Task<int> RunElevatedAsync(string file, string args, bool visible)
     {
-        var psi = new ProcessStartInfo(file, args)
+        // Working directory System32: cmd.exe looks up commands like "sfc" in the current folder first.
+        var psi = new ProcessStartInfo(SystemTool(file), args)
         {
             UseShellExecute = true,
+            WorkingDirectory = Environment.SystemDirectory,
             Verb = Admin.IsAdmin ? "" : "runas",
             WindowStyle = visible ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
         };

@@ -47,7 +47,14 @@ public partial class AppsPage : UserControl
     {
         var app = Ui.Item<InstalledApp>(sender);
         if (app == null) return;
-        if (!Ui.Ask($"Start the uninstaller for \"{app.Name}\"?\n\nThe app's own uninstaller will open - follow its steps.", "Uninstall")) return;
+        // Current-user entries can be written by any program running as you. Running one from an elevated
+        // Kemptly would hand that command admin rights, so show it and warn first.
+        var warning = Admin.IsAdmin && app.Scope == "Current user"
+            ? "\n\nWARNING: Kemptly is running as administrator and this entry was registered for your account only. " +
+              "Its uninstaller will also run as administrator. Only continue if the command below looks right."
+            : "";
+        if (!Ui.Ask($"Start the uninstaller for \"{app.Name}\"?\n\nThe app's own uninstaller will open - follow its steps.{warning}" +
+                    $"\n\nCommand:\n{app.UninstallString}", "Uninstall")) return;
         try
         {
             InstalledApps.RunUninstaller(app);
