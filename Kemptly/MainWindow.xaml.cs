@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Kemptly.Core;
@@ -8,6 +9,7 @@ namespace Kemptly;
 public partial class MainWindow : Window
 {
     public static MainWindow Instance { get; private set; } = null!;
+    public const string RepoUrl = "https://github.com/phiil-92/Kemptly";
 
     readonly Dictionary<string, UserControl> _pages = new();
 
@@ -15,6 +17,11 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Instance = this;
+
+        // "1.1.2+<commit>" -> "v1.1.2"
+        var version = typeof(MainWindow).Assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "";
+        VersionText.Text = "v" + version.Split('+')[0];
 
         if (Admin.IsAdmin)
         {
@@ -82,4 +89,6 @@ public partial class MainWindow : Window
     }
 
     void Elevate_Click(object sender, RoutedEventArgs e) => Admin.RestartElevated();
+
+    void Version_Click(object sender, RoutedEventArgs e) => Shell.Open(RepoUrl);
 }

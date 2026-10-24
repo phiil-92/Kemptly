@@ -12,6 +12,16 @@
             <Setter Property="Padding" Value="10,9"/>
             <Setter Property="Margin" Value="0,1"/>
         </Style>
+        <Style x:Key="VersionLink" TargetType="Hyperlink">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
+            <Setter Property="TextDecorations" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                    <Setter Property="TextDecorations" Value="Underline"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -29,9 +39,18 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Margin="12,6,0,18">
-                <Image Source="pack://application:,,,/Assets/logo.png" Width="28" Height="28"
-                       RenderOptions.BitmapScalingMode="HighQuality"/>
-                <TextBlock Text="Kemptly" FontSize="21" FontWeight="SemiBold" Margin="10,0,0,0"/>
+                <Image Source="pack://application:,,,/Assets/logo.png" Width="32" Height="32"
+                       RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center"/>
+                <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Kemptly" FontSize="21" FontWeight="SemiBold" LineHeight="24"/>
+                    <!-- Version number; opens the project's GitHub page -->
+                    <TextBlock FontSize="12" Margin="1,0,0,0">
+                        <Hyperlink x:Name="VersionLink" Click="Version_Click" Style="{StaticResource VersionLink}"
+                                   ToolTip="Open Kemptly on GitHub">
+                            <Run x:Name="VersionText" Text="v1.0.0"/><Run Text="  ·  GitHub"/>
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
             </StackPanel>
 
             <ListBox x:Name="Nav" Grid.Row="1" SelectionChanged="Nav_SelectionChanged"

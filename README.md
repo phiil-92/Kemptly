@@ -95,7 +95,7 @@ Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/d
 dotnet run --project Kemptly
 
 # Build the installer → dist\Kemptly-Setup.msi (self-contained, no .NET needed on target PCs)
-powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.1.1
+powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.1.2
 ```
 
 Releases are built automatically by GitHub Actions: push a tag like `v1.1.0` and the workflow attaches the MSI and portable exe to a new release.

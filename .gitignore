@@ -16,3 +16,6 @@ Installer/dialog.bmp
 .vscode/
 *.user
 *.suo
+
+# Local tooling
+.claude/

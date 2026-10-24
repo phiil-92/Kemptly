@@ -5,7 +5,7 @@
     <InstallerPlatform>x64</InstallerPlatform>
     <!-- Self-contained single-file build: dotnet publish ..\Kemptly (see build-installer.ps1) -->
     <AppExe>..\build\selfcontained\Kemptly.exe</AppExe>
-    <ProductVersion Condition="'$(ProductVersion)' == ''">1.1.1</ProductVersion>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">1.1.2</ProductVersion>
     <DefineConstants>AppExe=$(AppExe);Version=$(ProductVersion)</DefineConstants>
     <SuppressPdbOutput>true</SuppressPdbOutput>
   </PropertyGroup>
