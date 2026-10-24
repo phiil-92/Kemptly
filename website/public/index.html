@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kemptly - Clean up, speed up and check your Windows PC</title>
+  <meta name="description" content="Kemptly is a free, open-source Windows 11 app that cleans out junk files, stops apps from launching at startup and checks your PC for signs of malware.">
+  <meta name="theme-color" content="#0b1120">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css?v=2">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Kemptly - Clean up, speed up and check your Windows PC">
+  <meta property="og:description" content="Free and open source. Junk cleaner, disk analyzer, startup manager and security scan in one small app.">
+  <meta property="og:image" content="https://kemptly.toritech.net/assets/og-image.png">
+  <meta property="og:url" content="https://kemptly.toritech.net/">
+  <link rel="canonical" href="https://kemptly.toritech.net/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="main.js?v=2" defer></script>
+</head>
+<body>
+  <!-- Icon sprite -->
+  <svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 14.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+    <symbol id="i-disk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></symbol>
+    <symbol id="i-apps" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M6.3 7.3a8 8 0 1 0 11.4 0"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path class="fill" d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="Kemptly home">
+        <img src="assets/logo.png" alt="" width="32" height="32">
+        <span>Kemptly</span>
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#security">Security</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/phiil-92/Kemptly" class="nav-gh"><svg class="icon"><use href="#i-github"/></svg><span>GitHub</span></a>
+      </nav>
+      <a class="btn btn-primary btn-sm" href="#download">Download</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="glow" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="eyebrow"><svg class="icon"><use href="#i-sparkle"/></svg> Free and open source for Windows 10 and 11</p>
+        <h1>Your PC, <span class="grad">neat and tidy.</span></h1>
+        <p class="lead">Kemptly clears out junk files, stops apps from sneaking into your startup and checks your PC for signs of malware. Nine handy tools in one small, fast app.</p>
+        <div class="cta">
+          <a class="btn btn-primary btn-lg" href="https://github.com/phiil-92/Kemptly/releases/latest/download/Kemptly-Setup.msi">
+            <svg class="icon"><use href="#i-download"/></svg> Download for Windows
+          </a>
+          <a class="btn btn-ghost btn-lg" href="https://github.com/phiil-92/Kemptly">
+            <svg class="icon"><use href="#i-github"/></svg> View on GitHub
+          </a>
+        </div>
+        <p class="fine">Free · No admin rights needed · No account, no ads, no tracking</p>
+
+        <figure class="window hero-shot">
+          <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+          <img src="assets/screens/dashboard.png?v=2" width="1320" height="820" alt="Kemptly dashboard showing CPU, memory, uptime, drive usage and disk health">
+        </figure>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats" aria-label="Highlights">
+      <div class="container stats-grid">
+        <div><strong>9</strong><span>tools in one app</span></div>
+        <div><strong>0</strong><span>data collected</span></div>
+        <div><strong>1</strong><span>click to clean</span></div>
+        <div><strong>100%</strong><span>open source</span></div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Features</p>
+          <h2>Everything to keep Windows in shape</h2>
+          <p class="sub">No upsells, no "premium" tier. Every feature is in the free app.</p>
+        </div>
+
+        <div class="features">
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-sparkle"/></svg></div>
+            <h3>Junk Cleaner</h3>
+            <p>Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser and app caches, then frees the space in one click.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-disk"/></svg></div>
+            <h3>Disk Analyzer</h3>
+            <p>See which folders and file types fill your drive, find the largest files and delete them safely to the Recycle Bin.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-apps"/></svg></div>
+            <h3>Installed Apps</h3>
+            <p>Every program with its size and install date. Sort by size and uninstall the ones you never use.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-power"/></svg></div>
+            <h3>Startup Manager</h3>
+            <p>Stop apps and scheduled tasks from launching with Windows. Fully reversible, the same way Task Manager does it.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-sliders"/></svg></div>
+            <h3>Services</h3>
+            <p>See third-party background services at a glance and switch updaters and helpers to Manual or Disabled.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-activity"/></svg></div>
+            <h3>Processes</h3>
+            <p>Live CPU and memory use per app, grouped like Task Manager, with a quick End task button.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-globe"/></svg></div>
+            <h3>Network</h3>
+            <p>Which programs are talking to the internet right now, with host names and who signed each program.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-shield"/></svg></div>
+            <h3>Security Scan</h3>
+            <p>Looks for disguised files, fake system processes, startup tricks and weakened protection, plus one-click Defender scans.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-wrench"/></svg></div>
+            <h3>Tools</h3>
+            <p>Flush DNS, restart Explorer, repair Windows with SFC and DISM, create restore points, battery and energy reports.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section class="section section-alt" aria-labelledby="tour-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Take a look</p>
+          <h2 id="tour-title">Clean, native Windows 11 design</h2>
+          <p class="sub">Follows your light or dark theme and feels right at home next to Settings.</p>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Screenshots">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="shot-cleaner" id="tab-cleaner" data-tab="cleaner">Junk Cleaner</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="shot-startup" id="tab-startup" data-tab="startup">Startup</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="shot-tools" id="tab-tools" data-tab="tools">Tools</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="shot-security" id="tab-security" data-tab="security">Security</button>
+        </div>
+
+        <div class="shots">
+          <figure class="window shot-panel active" id="shot-cleaner" role="tabpanel" aria-labelledby="tab-cleaner">
+            <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="assets/screens/cleaner.png?v=2" width="1320" height="820" loading="lazy" alt="Junk Cleaner listing cleanable categories with their sizes">
+          </figure>
+          <figure class="window shot-panel" id="shot-startup" role="tabpanel" aria-labelledby="tab-startup">
+            <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="assets/screens/startup.png?v=2" width="1320" height="820" loading="lazy" alt="Startup manager with toggles to enable or disable startup apps">
+          </figure>
+          <figure class="window shot-panel" id="shot-tools" role="tabpanel" aria-labelledby="tab-tools">
+            <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="assets/screens/tools.png?v=2" width="1320" height="820" loading="lazy" alt="Tools page with one-click maintenance actions">
+          </figure>
+          <figure class="window shot-panel" id="shot-security" role="tabpanel" aria-labelledby="tab-security">
+            <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="assets/screens/security.png?v=2" width="1320" height="288" loading="lazy" alt="Security scan status: antivirus, virus definitions, firewall and user account control">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section id="security" class="section">
+      <div class="container two-col">
+        <div>
+          <p class="eyebrow">Security scan</p>
+          <h2>Spots the tricks malware uses</h2>
+          <p class="sub left">Kemptly complements your antivirus by checking the places malware likes to hide.</p>
+          <ul class="checks">
+            <li><svg class="icon"><use href="#i-check"/></svg>Programs pretending to be Windows processes</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Unsigned programs running from Temp, Downloads or AppData</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Startup entries and tasks that run hidden or encoded commands</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Hijacked system settings and tampered hosts files</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Disguised files like <code>invoice.pdf.exe</code></li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Defender, firewall and UAC status at a glance</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Safe by design</h3>
+          <dl class="facts">
+            <div><dt>No network service</dt><dd>Never opens a port or accepts connections.</dd></div>
+            <div><dt>No telemetry</dt><dd>No tracking, no accounts, no auto-update, no ads.</dd></div>
+            <div><dt>Nothing in the background</dt><dd>Only runs while you have it open. No services, no autostart.</dd></div>
+            <div><dt>You stay in control</dt><dd>Every delete or change needs a click and a confirmation. Startup changes are reversible.</dd></div>
+            <div><dt>Open source</dt><dd>Every line of code is <a href="https://github.com/phiil-92/Kemptly">on GitHub</a>. Read the <a href="https://github.com/phiil-92/Kemptly/blob/main/SECURITY.md">security policy</a>.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section id="download" class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Download</p>
+          <h2>Up and running in a minute</h2>
+        </div>
+        <ol class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <h3>Download</h3>
+            <p>Get <strong>Kemptly-Setup.msi</strong>, about 54 MB. Everything it needs is included.</p>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <h3>Install</h3>
+            <p>Double-click it and follow the steps. No admin rights needed, it installs just for your account.</p>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <h3>Clean up</h3>
+            <p>Open Kemptly from the Start menu and run your first scan. That's it.</p>
+          </li>
+        </ol>
+
+        <div class="download-box">
+          <div>
+            <h3>Kemptly for Windows</h3>
+            <p>Windows 10 or 11, 64-bit. Always the latest version.</p>
+          </div>
+          <div class="download-actions">
+            <a class="btn btn-primary btn-lg" href="https://github.com/phiil-92/Kemptly/releases/latest/download/Kemptly-Setup.msi">
+              <svg class="icon"><use href="#i-download"/></svg> Installer (.msi)
+            </a>
+            <a class="btn btn-ghost btn-lg" href="https://github.com/phiil-92/Kemptly/releases/latest/download/Kemptly-portable.exe">Portable (.exe)</a>
+          </div>
+        </div>
+        <p class="note">Windows may show <em>"Windows protected your PC"</em> because Kemptly isn't code-signed yet. Click <strong>More info</strong>, then <strong>Run anyway</strong>. <a href="https://github.com/phiil-92/Kemptly/releases">All releases and changelogs <svg class="icon icon-inline"><use href="#i-arrow"/></svg></a></p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <div class="container narrow">
+        <div class="section-head">
+          <p class="eyebrow">FAQ</p>
+          <h2>Questions and answers</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Is Kemptly really free?</summary>
+            <p>Yes. It's open source under the MIT license. There are no ads, no paid tier and no account.</p>
+          </details>
+          <details>
+            <summary>Will it delete my personal files?</summary>
+            <p>No. The Junk Cleaner only targets caches, temp files and leftovers, and shows you everything before cleaning. Files you delete in the Disk Analyzer go to the Recycle Bin by default. Nothing happens without your confirmation.</p>
+          </details>
+          <details>
+            <summary>Do I need administrator rights?</summary>
+            <p>Not to install or use it. A few system-wide actions, like cleaning the Windows temp folder or changing services, ask for admin rights through the normal Windows prompt.</p>
+          </details>
+          <details>
+            <summary>Why does Windows warn me when I open it?</summary>
+            <p>SmartScreen warns about apps that aren't code-signed, and signing certificates cost money. The full source code is public, so you can check exactly what Kemptly does. Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+          </details>
+          <details>
+            <summary>Does it replace my antivirus?</summary>
+            <p>No. The security scan looks for common malware tricks and weak settings, and can start Microsoft Defender scans, but it's a second pair of eyes, not an antivirus.</p>
+          </details>
+          <details>
+            <summary>How do I uninstall it?</summary>
+            <p>Open Settings, then Apps, then Installed apps, find Kemptly and choose Uninstall. Everything is removed.</p>
+          </details>
+          <details>
+            <summary>Wasn't this called WinTidy?</summary>
+            <p>Yes, version 1.0 was called WinTidy. Installing Kemptly automatically replaces it.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section final">
+      <div class="container final-inner">
+        <img src="assets/logo.png" alt="" width="72" height="72">
+        <h2>Give your PC a fresh start</h2>
+        <p class="sub">Free, open source and ready in a minute.</p>
+        <a class="btn btn-primary btn-lg" href="https://github.com/phiil-92/Kemptly/releases/latest/download/Kemptly-Setup.msi">
+          <svg class="icon"><use href="#i-download"/></svg> Download Kemptly
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="brand small"><img src="assets/logo.png" alt="" width="22" height="22"><span>Kemptly</span></div>
+      <nav aria-label="Footer">
+        <a href="https://github.com/phiil-92/Kemptly">Source code</a>
+        <a href="https://github.com/phiil-92/Kemptly/releases">Releases</a>
+        <a href="https://github.com/phiil-92/Kemptly/blob/main/SECURITY.md">Security</a>
+        <a href="https://github.com/phiil-92/Kemptly/blob/main/LICENSE">MIT License</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Privacy (Datenschutz)</a>
+      </nav>
+      <p>&copy; <span id="year">2026</span> phiil-92. Not affiliated with Microsoft. Windows is a trademark of Microsoft Corporation.</p>
+    </div>
+  </footer>
+</body>
+</html>

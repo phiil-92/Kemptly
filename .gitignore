@@ -19,3 +19,6 @@ Installer/dialog.bmp
 
 # Local tooling
 .claude/
+
+# Local secrets/settings (e.g. website contact email)
+.env
