@@ -131,7 +131,7 @@ public static class StartupManager
     }
 
     /// <summary>Throws UnauthorizedAccessException / SecurityException when admin rights are needed.</summary>
-    public static void SetEnabled(StartupItem item, bool enabled)
+    public static void SetEnabled(StartupItem item, bool enabled, bool log = true)
     {
         var (root, sub) = ApprovedLocation(item.Source);
         using var key = root.CreateSubKey(ApprovedBase + sub, true);
@@ -140,6 +140,18 @@ public static class StartupManager
         if (!enabled) BitConverter.GetBytes(DateTime.Now.ToFileTimeUtc()).CopyTo(data, 4);
         key.SetValue(item.Name, data, RegistryValueKind.Binary);
         item.Enabled = enabled;
+        if (log)
+            History.Add(ChangeKind.StartupToggle, $"{(enabled ? "Enabled" : "Disabled")} startup app \"{item.DisplayName}\"",
+                item.Location, History.Data(("name", item.Name), ("source", item.Source), ("enabled", enabled)));
+    }
+
+    /// <summary>Re-creates a Run registry entry that was removed (used by undo).</summary>
+    public static void RestoreRunValue(StartupSource source, string name, string command)
+    {
+        var root = source == StartupSource.UserRun ? Registry.CurrentUser : Hklm;
+        var path = source == StartupSource.MachineRun32 ? Run32Key : RunKey;
+        using var key = root.CreateSubKey(path, true);
+        key.SetValue(name, command, RegistryValueKind.String);
     }
 
     public static void Remove(StartupItem item)
@@ -162,6 +174,8 @@ public static class StartupManager
             ak?.DeleteValue(item.Name, false);
         }
         catch { }
+        History.Add(ChangeKind.StartupRemoved, $"Removed startup entry \"{item.DisplayName}\"", item.Command,
+            History.Data(("name", item.Name), ("source", item.Source), ("command", item.Command), ("shortcut", item.ShortcutFile)));
     }
 }
 
@@ -283,12 +297,15 @@ public static class TaskSchedulerReader
         };
     }
 
-    public static void SetEnabled(TaskItem item, bool enabled)
+    public static void SetEnabled(TaskItem item, bool enabled, bool log = true)
     {
         dynamic svc = Connect();
         dynamic folder = svc.GetFolder(item.FolderPath);
         dynamic task = folder.GetTask(item.Name);
         task.Enabled = enabled;
         item.Enabled = enabled;
+        if (log)
+            History.Add(ChangeKind.TaskToggle, $"{(enabled ? "Enabled" : "Disabled")} scheduled task \"{item.Name}\"",
+                item.FullPath, History.Data(("name", item.Name), ("folder", item.FolderPath), ("enabled", enabled)));
     }
 }

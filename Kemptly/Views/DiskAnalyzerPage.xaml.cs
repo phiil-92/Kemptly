@@ -34,6 +34,7 @@ public partial class DiskAnalyzerPage : UserControl
     {
         InitializeComponent();
         FileGrid.ItemsSource = _files;
+        RecycleCheck.IsChecked = AppSettings.Current.RecycleByDefault;
         PathBox.Text = Path.GetPathRoot(Environment.SystemDirectory) ?? @"C:\";
 
         foreach (var d in DriveInfo.GetDrives().Where(d => d.IsReady && d.DriveType is DriveType.Fixed or DriveType.Removable))
@@ -206,6 +207,7 @@ public partial class DiskAnalyzerPage : UserControl
         if (!Ui.Confirm($"{how} {what}?")) return;
 
         var failed = new List<string>();
+        var deleted = new List<FileEntry>();
         foreach (var t in targets)
         {
             try
@@ -213,9 +215,13 @@ public partial class DiskAnalyzerPage : UserControl
                 if (recycle) { if (!Shell.Recycle(t.FullPath)) throw new IOException("Could not move to Recycle Bin"); }
                 else File.Delete(t.FullPath);
                 _files.Remove(t);
+                deleted.Add(t);
             }
             catch (Exception ex) { failed.Add($"{t.Name}: {ex.Message}"); }
         }
+        if (deleted.Count > 0)
+            History.Add(ChangeKind.FilesDeleted, $"{(recycle ? "Moved" : "Deleted")} {deleted.Count} large file(s) ({Fmt.Bytes(deleted.Sum(d => d.Size))}){(recycle ? " to the Recycle Bin" : "")}",
+                string.Join("\n", deleted.Take(10).Select(d => d.FullPath)), History.Data(("recycled", recycle)));
         if (failed.Count > 0) Ui.Error("Some files could not be deleted (in use or protected):\n\n" + string.Join("\n", failed.Take(10)));
     }
 }

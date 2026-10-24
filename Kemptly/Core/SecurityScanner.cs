@@ -112,6 +112,7 @@ public static class SecurityScanner
             Step(findings, progress, "hosts file and proxy", CheckHostsAndProxy);
             Step(findings, progress, "network connections", CheckNetwork);
             Step(findings, progress, "disguised files", CheckDisguisedFiles);
+            Step(findings, progress, "browser extensions", CheckExtensions);
         });
 
         var ordered = findings
@@ -540,6 +541,32 @@ public static class SecurityScanner
                 Detail = "Connected to " + string.Join(", ", remotes) + ". Make sure you know what this program is.",
                 Path = p.Path, Pid = g.Key,
             });
+        }
+    }
+
+    // ---------------- Browser extensions ----------------
+
+    static void CheckExtensions(List<Finding> findings)
+    {
+        foreach (var x in BrowserExtensions.Load().Where(x => x.Enabled))
+        {
+            if (!x.FromStore)
+                findings.Add(new Finding
+                {
+                    Severity = x.Risk == Severity.High ? Severity.High : Severity.Medium, Category = "Browser",
+                    Title = $"{x.Browser} extension \"{x.Name}\" wasn't installed from an official store",
+                    Detail = $"It {x.Reasons.ToLowerInvariant()}. Extensions added outside the store are a common way adware and spyware get in. " +
+                             "Remove it unless you installed it on purpose (details on the Browser extensions tab).",
+                    Path = x.Folder,
+                });
+            else if (x.Risk == Severity.High)
+                findings.Add(new Finding
+                {
+                    Severity = Severity.Low, Category = "Browser",
+                    Title = $"Powerful {x.Browser} extension: \"{x.Name}\"",
+                    Detail = $"It {x.Reasons.ToLowerInvariant()}. Fine for tools you trust (like ad blockers or password managers); remove it if you don't recognise it.",
+                    Path = x.Folder,
+                });
         }
     }
 

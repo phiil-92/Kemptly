@@ -58,6 +58,7 @@ public partial class AppsPage : UserControl
         try
         {
             InstalledApps.RunUninstaller(app);
+            History.Add(ChangeKind.AppUninstalled, $"Started the uninstaller for {app.Name}", app.UninstallString);
             StatusText.Text = $"Uninstaller for {app.Name} started. Press Refresh when it's finished.";
         }
         catch (Exception ex) { Ui.Error($"Could not start the uninstaller:\n{ex.Message}\n\nCommand: {app.UninstallString}"); }

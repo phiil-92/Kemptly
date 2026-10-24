@@ -18,7 +18,7 @@ public partial class NetworkPage : UserControl
     {
         InitializeComponent();
         _timer.Tick += (_, _) => Refresh();
-        Loaded += (_, _) => { Refresh(); if (AutoCheck.IsChecked == true) _timer.Start(); };
+        Loaded += (_, _) => { Refresh(); LoadBlocked(); if (AutoCheck.IsChecked == true) _timer.Start(); };
         Unloaded += (_, _) => _timer.Stop();
     }
 
@@ -122,6 +122,45 @@ public partial class NetworkPage : UserControl
         else Ui.Info("The location of this process isn't accessible.");
     }
 
+    void LoadBlocked()
+    {
+        var blocked = Firewall.ListBlocked();
+        BlockedList.ItemsSource = blocked;
+        BlockedExpander.Header = $"Programs blocked by Kemptly ({blocked.Count})";
+    }
+
+    async void Block_Click(object sender, RoutedEventArgs e)
+    {
+        var row = Ui.Item<ConnRow>(sender);
+        if (row?.ProcessPath == null) { Ui.Info("The program's location isn't accessible, so it can't be blocked here."); return; }
+        if (Signature.IsWindowsPath(row.ProcessPath))
+        {
+            Ui.Error($"{row.Process} is part of Windows. Blocking it could break updates, networking or other apps.");
+            return;
+        }
+        if (!Ui.Confirm($"Block {row.Process} from the internet?\n\n{row.ProcessPath}\n\nA Windows Firewall rule is created (administrator permission needed). " +
+                        "You can unblock it below or undo it on the History page.", "Block internet access")) return;
+        if (await Firewall.BlockAsync(row.ProcessPath))
+        {
+            StatusText.Text = $"{row.Process} is blocked from the internet. Restart it for existing connections to drop.";
+            LoadBlocked();
+        }
+        else Ui.Error("The firewall rule could not be created (permission was not given or the path is invalid).");
+    }
+
+    async void Unblock_Click(object sender, RoutedEventArgs e)
+    {
+        var b = Ui.Item<BlockedApp>(sender);
+        if (b == null) return;
+        if (await Firewall.UnblockAsync(b.RuleName))
+        {
+            History.Add(ChangeKind.Other, $"Unblocked internet access for {b.AppName}", b.Program);
+            StatusText.Text = $"{b.AppName} can use the internet again.";
+            LoadBlocked();
+        }
+        else Ui.Error("The firewall rule could not be removed (administrator permission was not given).");
+    }
+
     void Kill_Click(object sender, RoutedEventArgs e)
     {
         var row = Ui.Item<ConnRow>(sender);
@@ -132,7 +171,12 @@ public partial class NetworkPage : UserControl
             return;
         }
         if (!Ui.Confirm($"End \"{row.Process}\" (PID {row.Pid})? Unsaved work will be lost.")) return;
-        try { using var p = Process.GetProcessById(row.Pid); p.Kill(true); }
+        try
+        {
+            using var p = Process.GetProcessById(row.Pid);
+            p.Kill(true);
+            History.Add(ChangeKind.ProcessEnded, $"Ended {row.Process}", row.ProcessPath ?? "");
+        }
         catch (Exception ex) { Ui.Error(ex.Message); }
         Refresh();
     }

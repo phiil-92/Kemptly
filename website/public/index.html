@@ -33,6 +33,9 @@
     <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
     <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -62,7 +65,7 @@
       <div class="container hero-inner">
         <p class="eyebrow"><svg class="icon"><use href="#i-sparkle"/></svg> Free and open source for Windows 10 and 11</p>
         <h1>Your PC, <span class="grad">neat and tidy.</span></h1>
-        <p class="lead">Kemptly clears out junk files, stops apps from sneaking into your startup and checks your PC for signs of malware. Nine handy tools in one small, fast app.</p>
+        <p class="lead">Kemptly clears out junk files, stops apps from sneaking into your startup and checks your PC for signs of malware. A dozen handy tools in one small, fast app.</p>
         <div class="cta">
           <a class="btn btn-primary btn-lg" href="https://github.com/phiil-92/Kemptly/releases/latest/download/Kemptly-Setup.msi">
             <svg class="icon"><use href="#i-download"/></svg> Download for Windows
@@ -75,7 +78,7 @@
 
         <figure class="window hero-shot">
           <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
-          <img src="assets/screens/dashboard.png?v=2" width="1320" height="820" alt="Kemptly dashboard showing CPU, memory, uptime, drive usage and disk health">
+          <img src="assets/screens/dashboard.png?v=3" width="1320" height="820" alt="Kemptly dashboard showing CPU, memory, uptime, drive usage and disk health">
         </figure>
       </div>
     </section>
@@ -83,7 +86,7 @@
     <!-- Stats -->
     <section class="stats" aria-label="Highlights">
       <div class="container stats-grid">
-        <div><strong>9</strong><span>tools in one app</span></div>
+        <div><strong>12</strong><span>tools in one app</span></div>
         <div><strong>0</strong><span>data collected</span></div>
         <div><strong>1</strong><span>click to clean</span></div>
         <div><strong>100%</strong><span>open source</span></div>
@@ -103,17 +106,22 @@
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-sparkle"/></svg></div>
             <h3>Junk Cleaner</h3>
-            <p>Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser and app caches, then frees the space in one click.</p>
+            <p>Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser and app caches, then frees the space in one click. Can also clean automatically every week.</p>
           </article>
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-disk"/></svg></div>
             <h3>Disk Analyzer</h3>
-            <p>See which folders and file types fill your drive, find the largest files and delete them safely to the Recycle Bin.</p>
+            <p>See which folders and file types fill your drive, find duplicate files by their content, and spot big space users like restore points or old Windows installs.</p>
           </article>
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-apps"/></svg></div>
             <h3>Installed Apps</h3>
-            <p>Every program with its size and install date. Sort by size and uninstall the ones you never use.</p>
+            <p>Every program with its size and install date, plus a one-click remover for the preinstalled extras Windows came with.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-refresh"/></svg></div>
+            <h3>App Updates</h3>
+            <p>Finds outdated programs and updates them one by one or all at once, using winget, which is built into Windows.</p>
           </article>
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-power"/></svg></div>
@@ -133,17 +141,27 @@
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-globe"/></svg></div>
             <h3>Network</h3>
-            <p>Which programs are talking to the internet right now, with host names and who signed each program.</p>
+            <p>Which programs are talking to the internet right now, with host names and who signed each program. Block any app from the internet in one click.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-lock"/></svg></div>
+            <h3>Privacy</h3>
+            <p>Reversible switches for Windows tracking, ads, suggestions, web results in Start search, Recall and Copilot.</p>
           </article>
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-shield"/></svg></div>
             <h3>Security Scan</h3>
-            <p>Looks for disguised files, fake system processes, startup tricks and weakened protection, plus one-click Defender scans.</p>
+            <p>Looks for disguised files, fake system processes, startup tricks, risky browser extensions and weakened protection, plus one-click Defender scans.</p>
           </article>
           <article class="card">
             <div class="card-icon"><svg class="icon"><use href="#i-wrench"/></svg></div>
             <h3>Tools</h3>
-            <p>Flush DNS, restart Explorer, repair Windows with SFC and DISM, create restore points, battery and energy reports.</p>
+            <p>Repair Windows with SFC and DISM, restore points, DNS flush and more, plus a plain-language crash history and an exportable PC report.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon"><svg class="icon"><use href="#i-undo"/></svg></div>
+            <h3>History and Undo</h3>
+            <p>Every change Kemptly makes is logged. Changed your mind? Undo it with one click.</p>
           </article>
         </div>
       </div>
@@ -162,25 +180,30 @@
           <button class="tab active" role="tab" aria-selected="true" aria-controls="shot-cleaner" id="tab-cleaner" data-tab="cleaner">Junk Cleaner</button>
           <button class="tab" role="tab" aria-selected="false" aria-controls="shot-startup" id="tab-startup" data-tab="startup">Startup</button>
           <button class="tab" role="tab" aria-selected="false" aria-controls="shot-tools" id="tab-tools" data-tab="tools">Tools</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="shot-privacy" id="tab-privacy" data-tab="privacy">Privacy</button>
           <button class="tab" role="tab" aria-selected="false" aria-controls="shot-security" id="tab-security" data-tab="security">Security</button>
         </div>
 
         <div class="shots">
           <figure class="window shot-panel active" id="shot-cleaner" role="tabpanel" aria-labelledby="tab-cleaner">
             <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
-            <img src="assets/screens/cleaner.png?v=2" width="1320" height="820" loading="lazy" alt="Junk Cleaner listing cleanable categories with their sizes">
+            <img src="assets/screens/cleaner.png?v=3" width="1320" height="820" loading="lazy" alt="Junk Cleaner listing cleanable categories with their sizes">
           </figure>
           <figure class="window shot-panel" id="shot-startup" role="tabpanel" aria-labelledby="tab-startup">
             <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
-            <img src="assets/screens/startup.png?v=2" width="1320" height="820" loading="lazy" alt="Startup manager with toggles to enable or disable startup apps">
+            <img src="assets/screens/startup.png?v=3" width="1320" height="820" loading="lazy" alt="Startup manager with toggles to enable or disable startup apps">
           </figure>
           <figure class="window shot-panel" id="shot-tools" role="tabpanel" aria-labelledby="tab-tools">
             <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
-            <img src="assets/screens/tools.png?v=2" width="1320" height="820" loading="lazy" alt="Tools page with one-click maintenance actions">
+            <img src="assets/screens/tools.png?v=3" width="1320" height="820" loading="lazy" alt="Tools page with one-click maintenance actions">
+          </figure>
+          <figure class="window shot-panel" id="shot-privacy" role="tabpanel" aria-labelledby="tab-privacy">
+            <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+            <img src="assets/screens/privacy.png?v=3" width="1320" height="820" loading="lazy" alt="Privacy page with switches for advertising ID, web search, ads and telemetry">
           </figure>
           <figure class="window shot-panel" id="shot-security" role="tabpanel" aria-labelledby="tab-security">
             <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
-            <img src="assets/screens/security.png?v=2" width="1320" height="288" loading="lazy" alt="Security scan status: antivirus, virus definitions, firewall and user account control">
+            <img src="assets/screens/security.png?v=3" width="1320" height="322" loading="lazy" alt="Security scan status: antivirus, virus definitions, firewall and user account control">
           </figure>
         </div>
       </div>
@@ -206,9 +229,9 @@
           <h3>Safe by design</h3>
           <dl class="facts">
             <div><dt>No network service</dt><dd>Never opens a port or accepts connections.</dd></div>
-            <div><dt>No telemetry</dt><dd>No tracking, no accounts, no auto-update, no ads.</dd></div>
-            <div><dt>Nothing in the background</dt><dd>Only runs while you have it open. No services, no autostart.</dd></div>
-            <div><dt>You stay in control</dt><dd>Every delete or change needs a click and a confirmation. Startup changes are reversible.</dd></div>
+            <div><dt>No telemetry</dt><dd>No tracking, no accounts, no ads. Kemptly only goes online when you ask it to, for example to check for updates.</dd></div>
+            <div><dt>Nothing in the background</dt><dd>Only runs while you have it open, unless you turn on weekly cleaning. No services, no autostart.</dd></div>
+            <div><dt>You stay in control</dt><dd>Every delete or change needs a click and a confirmation, and the History page can undo changes.</dd></div>
             <div><dt>Open source</dt><dd>Every line of code is <a href="https://github.com/phiil-92/Kemptly">on GitHub</a>. Read the <a href="https://github.com/phiil-92/Kemptly/blob/main/SECURITY.md">security policy</a>.</dd></div>
           </dl>
         </div>
@@ -279,6 +302,10 @@
           <details>
             <summary>Why does Windows warn me when I open it?</summary>
             <p>SmartScreen warns about apps that aren't code-signed, and signing certificates cost money. The full source code is public, so you can check exactly what Kemptly does. Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+          </details>
+          <details>
+            <summary>Does Kemptly go online?</summary>
+            <p>Only when you ask it to: when you check for app updates (winget asks the Microsoft package catalog and downloads updates from the app makers), when you check for a new Kemptly version (asks GitHub), and for host names on the Network page. There is no tracking and no automatic update.</p>
           </details>
           <details>
             <summary>Does it replace my antivirus?</summary>

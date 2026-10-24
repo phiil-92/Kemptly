@@ -50,7 +50,7 @@ public partial class ToolsPage : UserControl
         catch { return ""; }
     }
 
-    async Task Elevated(string title, string file, string args, bool visible)
+    async Task<int> Elevated(string title, string file, string args, bool visible)
     {
         Log($"{title}: starting…");
         int code = await Shell.RunElevatedAsync(file, args, visible);
@@ -61,6 +61,7 @@ public partial class ToolsPage : UserControl
             0 => $"{title}: done.",
             _ => $"{title}: finished with exit code {code}.",
         });
+        return code;
     }
 
     List<ToolDef> CreateTools() =>
@@ -89,13 +90,15 @@ public partial class ToolsPage : UserControl
             Native.SHQueryRecycleBin(null, ref info);
             Native.SHEmptyRecycleBin(IntPtr.Zero, null, 1 | 2 | 4);
             Log($"Recycle Bin emptied ({Fmt.Bytes(info.i64Size)} freed).");
+            History.Add(ChangeKind.FilesDeleted, $"Emptied the Recycle Bin ({Fmt.Bytes(info.i64Size)})");
             return Task.CompletedTask;
         }),
 
         new("", "Turn off hibernation", $"Deletes hiberfil.sys, which can use many GB. Also disables Fast Startup. {HiberfilInfo()}", "Turn off", true, async () =>
         {
             if (!Ui.Ask("Turn off hibernation? (You can turn it back on with: powercfg /h on)")) return;
-            await Elevated("Turn off hibernation", "powercfg.exe", "/h off", false);
+            if (await Elevated("Turn off hibernation", "powercfg.exe", "/h off", false) == 0)
+                History.Add(ChangeKind.Hibernation, "Turned off hibernation", "hiberfil.sys deleted, Fast Startup off", History.Data(("enabled", false)));
         }),
 
         new("", "Clean component store", "Removes superseded Windows update files from WinSxS with DISM. Can free several GB; takes a few minutes.", "Clean up", true,
@@ -143,7 +146,28 @@ public partial class ToolsPage : UserControl
             Log("Disk Cleanup opened. Tip: click 'Clean up system files' to see Windows.old and update leftovers.");
             return Task.CompletedTask;
         }),
+
+        new("", "Export PC report", "Saves a summary of this PC (system, drives, junk, startup apps, security check, crashes) as a web page, handy when someone helps you remotely.", "Export", false,
+            ExportReportAsync),
     ];
+
+    public void StartReport() => _ = ExportReportAsync();
+
+    async Task ExportReportAsync()
+    {
+        var dlg = new Microsoft.Win32.SaveFileDialog
+        {
+            FileName = $"Kemptly-report-{DateTime.Now:yyyy-MM-dd}.html",
+            Filter = "Web page (*.html)|*.html",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+        };
+        if (dlg.ShowDialog() != true) return;
+        Log("Creating the report, this takes about a minute…");
+        var html = await ReportExporter.BuildAsync(new Progress<string>(s => Log(s)));
+        await File.WriteAllTextAsync(dlg.FileName, html);
+        Log($"Report saved: {dlg.FileName}");
+        Shell.Open(dlg.FileName);
+    }
 
     async void Run_Click(object sender, RoutedEventArgs e)
     {

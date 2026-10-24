@@ -141,6 +141,29 @@ internal static class Native
         return SetFileInformationByHandle(h, 4, ref delete, 4);
     }
 
+    // ---- File identity (to recognise hard links, which share one copy on disk) ----
+    [StructLayout(LayoutKind.Sequential)]
+    struct BY_HANDLE_FILE_INFORMATION
+    {
+        public uint Attributes;
+        public uint CreationLow, CreationHigh, AccessLow, AccessHigh, WriteLow, WriteHigh;
+        public uint VolumeSerial, SizeHigh, SizeLow, Links, IndexHigh, IndexLow;
+    }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool GetFileInformationByHandle(Microsoft.Win32.SafeHandles.SafeFileHandle h, out BY_HANDLE_FILE_INFORMATION info);
+
+    /// <summary>Volume + file index; equal for hard links of the same file. Null if unreadable.</summary>
+    public static (uint Volume, ulong Index)? GetFileId(string path)
+    {
+        try
+        {
+            using var h = File.OpenHandle(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            return GetFileInformationByHandle(h, out var i) ? (i.VolumeSerial, ((ulong)i.IndexHigh << 32) | i.IndexLow) : null;
+        }
+        catch { return null; }
+    }
+
     // ---- Network ----
     [DllImport("iphlpapi.dll")]
     public static extern uint GetExtendedTcpTable(IntPtr table, ref int size, bool order, int af, int tableClass, uint reserved);

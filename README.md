@@ -24,15 +24,18 @@
 
 | | |
 |---|---|
-| **Junk Cleaner** | Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser & app caches, developer caches and the Recycle Bin - then frees the space with one click. |
-| **Disk Analyzer** | See which folders and file types fill your drive, list the largest files and delete them (to the Recycle Bin by default). |
-| **Installed Apps** | Every desktop program with its size and install date - sort by size and uninstall what you don't use. |
+| **Junk Cleaner** | Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser & app caches, developer caches and the Recycle Bin - then frees the space with one click. Optional weekly automatic cleaning. |
+| **Disk Analyzer** | See which folders and file types fill your drive, list the largest files, find **duplicate files** by content, and spot big space users like restore points, old Windows installs, WSL/Docker disks and `node_modules`. |
+| **Installed Apps** | Every desktop program with its size and install date, plus a **bloatware remover** for preinstalled Store apps (reinstallable from the Store). |
+| **App Updates** | Finds outdated programs with winget (built into Windows) and updates them one by one or all at once. |
 | **Startup** | Stop apps and scheduled tasks from launching with Windows. Disabling is reversible and uses the same mechanism as Task Manager. |
 | **Services** | Third-party background services at a glance; switch updaters and helpers to *Manual* or *Disabled*. |
 | **Processes** | Live CPU and memory per app, grouped like Task Manager, with *End task*. |
-| **Network** | Which programs are talking to the internet right now, with reverse-DNS host names and signature checks. |
-| **Security Scan** | Heuristic checks for signs of malware (see below) plus one-click Microsoft Defender scans. |
-| **Tools** | Flush DNS, restart Explorer, turn off hibernation, SFC / DISM repair, component-store cleanup, restore points, network reset, battery & energy reports. |
+| **Network** | Which programs are talking to the internet right now, with host names and signature checks. **Block** any program from the internet with one click (Windows Firewall, reversible). |
+| **Privacy** | Reversible switches for Windows tracking, ads, suggestions, web results in Start search, Recall and Copilot. |
+| **Security Scan** | Heuristic checks for signs of malware (see below), a **browser extension check** for Chrome, Edge, Brave, Opera, Vivaldi and Firefox, plus one-click Microsoft Defender scans. |
+| **Tools** | Flush DNS, restart Explorer, turn off hibernation, SFC / DISM repair, component-store cleanup, restore points, network reset, battery & energy reports, **crash history** in plain language and an exportable **PC report**. |
+| **History** | Every change Kemptly makes is logged, with **Undo** where possible. |
 
 ### What the security scan looks for
 
@@ -42,6 +45,7 @@
 - **System hijacks**: Image File Execution Options debuggers, replaced Winlogon shell/Userinit, AppInit DLLs
 - **Hosts file / proxy tampering** that redirects or blocks well-known sites
 - **Disguised files** like `invoice.pdf.exe` or right-to-left filename tricks
+- **Browser extensions** installed outside the official stores, or with very broad permissions
 - Status of **Defender, virus definitions, firewall and UAC**, plus Defender exclusions
 
 > Kemptly complements your antivirus - it doesn't replace it.
@@ -58,12 +62,18 @@
 <td align="center"><b>Startup</b></td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/security.png" alt="Security scan"></td>
+<td><img src="docs/screenshots/privacy.png" alt="Privacy"></td>
 <td><img src="docs/screenshots/tools.png" alt="Tools"></td>
 </tr>
 <tr>
-<td align="center"><b>Security Scan</b></td>
+<td align="center"><b>Privacy</b></td>
 <td align="center"><b>Tools</b></td>
+</tr>
+<tr>
+<td colspan="2"><img src="docs/screenshots/security.png" alt="Security scan"></td>
+</tr>
+<tr>
+<td colspan="2" align="center"><b>Security Scan</b></td>
 </tr>
 </table>
 
@@ -83,9 +93,9 @@ Some features (Windows temp / update cleanup, services, all-users startup entrie
 
 ## Privacy & safety
 
-- Everything runs locally. **No telemetry, no network calls** (apart from reverse-DNS lookups on the Network page and Defender's own updates).
+- Everything runs locally. **No telemetry.** Kemptly only goes online when you ask it to: checking for app updates (winget), checking for a new Kemptly version, reverse-DNS lookups on the Network page and Defender updates.
 - Nothing is changed or deleted until you click a button and confirm.
-- Startup changes are reversible; large-file deletion goes to the Recycle Bin by default.
+- Changes are logged on the History page with Undo; file deletion goes to the Recycle Bin by default.
 
 ## Build from source
 
@@ -96,7 +106,7 @@ Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/d
 dotnet run --project Kemptly
 
 # Build the installer → dist\Kemptly-Setup.msi (self-contained, no .NET needed on target PCs)
-powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.1.2
+powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.2.0
 ```
 
 Releases are built automatically by GitHub Actions: push a tag like `v1.1.0` and the workflow attaches the MSI and portable exe to a new release.

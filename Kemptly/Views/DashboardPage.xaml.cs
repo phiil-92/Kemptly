@@ -113,4 +113,6 @@ public partial class DashboardPage : UserControl
 
     void QuickDisk_Click(object sender, RoutedEventArgs e) => MainWindow.Instance.Navigate("disk");
     void QuickStartup_Click(object sender, RoutedEventArgs e) => MainWindow.Instance.Navigate("startup");
+    void QuickUpdates_Click(object sender, RoutedEventArgs e) => MainWindow.Instance.Navigate("updates");
+    void QuickReport_Click(object sender, RoutedEventArgs e) => ((ToolsPage)MainWindow.Instance.Navigate("tools")).StartReport();
 }

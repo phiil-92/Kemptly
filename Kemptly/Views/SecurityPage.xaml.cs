@@ -126,6 +126,7 @@ public partial class SecurityPage : UserControl
         {
             using var p = Process.GetProcessById(pid);
             p.Kill(true);
+            History.Add(ChangeKind.ProcessEnded, $"Ended a suspicious process (PID {pid})", f.Path ?? "");
             Ui.Info("Process ended. If it was malware, also disable its startup entry and run a Defender scan.");
         }
         catch (ArgumentException) { Ui.Info("The process has already exited."); }
@@ -171,7 +172,13 @@ public partial class SecurityPage : UserControl
         var f = Ui.Item<Finding>(sender);
         if (f?.Path == null) return;
         if (!Ui.Confirm($"Move this file to the Recycle Bin?\n\n{f.Path}")) return;
-        if (Shell.Recycle(f.Path)) { _findings.Remove(f); ShowList(); }
+        if (Shell.Recycle(f.Path))
+        {
+            History.Add(ChangeKind.FilesDeleted, $"Moved suspicious file {Path.GetFileName(f.Path)} to the Recycle Bin", f.Path,
+                History.Data(("recycled", true)));
+            _findings.Remove(f);
+            ShowList();
+        }
         else Ui.Error("The file could not be deleted (it may be in use or protected).");
     }
 

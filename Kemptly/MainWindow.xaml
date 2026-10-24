@@ -9,7 +9,7 @@
             <Setter Property="Margin" Value="4,0,14,0"/>
         </Style>
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-            <Setter Property="Padding" Value="10,9"/>
+            <Setter Property="Padding" Value="10,7"/>
             <Setter Property="Margin" Value="0,1"/>
         </Style>
         <Style x:Key="VersionLink" TargetType="Hyperlink">
@@ -59,12 +59,16 @@
                 <ListBoxItem Tag="cleaner"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE74D;" Style="{StaticResource NavIcon}"/><TextBlock Text="Junk Cleaner"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="disk"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xEDA2;" Style="{StaticResource NavIcon}"/><TextBlock Text="Disk Analyzer"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="apps"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE71D;" Style="{StaticResource NavIcon}"/><TextBlock Text="Installed Apps"/></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="updates"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE895;" Style="{StaticResource NavIcon}"/><TextBlock Text="App Updates"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="startup"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE7E8;" Style="{StaticResource NavIcon}"/><TextBlock Text="Startup"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="processes"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE9D9;" Style="{StaticResource NavIcon}"/><TextBlock Text="Processes"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="services"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE912;" Style="{StaticResource NavIcon}"/><TextBlock Text="Services"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="network"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE968;" Style="{StaticResource NavIcon}"/><TextBlock Text="Network"/></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="privacy"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE72E;" Style="{StaticResource NavIcon}"/><TextBlock Text="Privacy"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="security"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xEA18;" Style="{StaticResource NavIcon}"/><TextBlock Text="Security Scan"/></StackPanel></ListBoxItem>
                 <ListBoxItem Tag="tools"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE90F;" Style="{StaticResource NavIcon}"/><TextBlock Text="Tools"/></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="history"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE81C;" Style="{StaticResource NavIcon}"/><TextBlock Text="History"/></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="settings"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE713;" Style="{StaticResource NavIcon}"/><TextBlock Text="Settings"/></StackPanel></ListBoxItem>
             </ListBox>
 
             <Border Grid.Row="2" Style="{StaticResource Card}" Padding="12">

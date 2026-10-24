@@ -1,0 +1,63 @@
+<UserControl x:Class="Kemptly.Views.ExtensionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="0,12,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource Subtle}"
+                   Text="Extensions in Chrome, Edge, Brave, Opera, Vivaldi, Helium and Firefox, rated by what they're allowed to do. A high rating doesn't mean an extension is bad (ad blockers need broad access), but remove anything you don't recognise."/>
+        <WrapPanel Grid.Row="1" Margin="0,12,0,12">
+            <Button Content="Refresh" Click="Refresh_Click" Padding="14,6" Margin="0,0,16,0"/>
+            <TextBlock x:Name="StatusText" Style="{StaticResource Subtle}" VerticalAlignment="Center"/>
+        </WrapPanel>
+        <DataGrid x:Name="ExtGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="None" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Risk" Width="90" SortMemberPath="Risk">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource SeverityPill}" VerticalAlignment="Center" Margin="0,6">
+                                <TextBlock Text="{Binding RiskText}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Extension" Width="1.3*" SortMemberPath="Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,6">
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Style="{StaticResource Subtle}" FontSize="12">
+                                    <Run Text="{Binding Browser, Mode=OneWay}"/><Run Text=" · "/><Run Text="{Binding Profile, Mode=OneWay}"/><Run Text=" · "/><Run Text="{Binding StateText, Mode=OneWay}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Why" Binding="{Binding Reasons}" Width="2*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="0,6"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="170" CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Folder" Click="Folder_Click" Padding="8,2" FontSize="12" Margin="0,0,4,0"/>
+                                <Button Content="How to remove" Click="Remove_Click" Padding="8,2" FontSize="12"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Text;
@@ -21,6 +22,16 @@ public abstract class ObservableObject : INotifyPropertyChanged
     }
 
     public void Raise(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+}
+
+public static class AppInfo
+{
+    public const string RepoUrl = "https://github.com/phiil-92/Kemptly";
+
+    /// <summary>"1.2.0" (from the assembly's informational version, without the "+commit" suffix).</summary>
+    public static string Version { get; } =
+        (typeof(AppInfo).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0")
+        .Split('+')[0];
 }
 
 public static class Fmt
@@ -213,6 +224,14 @@ public static class Shell
 
     public static string EncodePowerShell(string script) =>
         Convert.ToBase64String(Encoding.Unicode.GetBytes(script));
+
+    /// <summary>Runs a PowerShell script and returns its output.</summary>
+    public static Task<RunResult> PowerShellAsync(string script)
+    {
+        var full = "[Console]::OutputEncoding = [Text.Encoding]::UTF8; $ProgressPreference='SilentlyContinue'; " + script;
+        return RunAsync("powershell.exe",
+            $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand {EncodePowerShell(full)}", Encoding.UTF8);
+    }
 
     /// <summary>Runs a PowerShell script that writes JSON to stdout and returns the parsed root.</summary>
     public static async Task<JsonElement?> PowerShellJsonAsync(string script)

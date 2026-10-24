@@ -121,6 +121,7 @@ public partial class ProcessesPage : UserControl
             catch (ArgumentException) { /* already exited */ }
             catch { failed++; }
         }
+        if (failed < row.Pids.Count) History.Add(ChangeKind.ProcessEnded, $"Ended {baseName}", row.Path ?? "");
         if (failed > 0) Ui.Error($"{failed} process(es) could not be ended. They may need administrator rights.");
         Refresh();
     }

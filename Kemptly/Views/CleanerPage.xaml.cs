@@ -16,6 +16,24 @@ public partial class CleanerPage : UserControl
         InitializeComponent();
         CatGrid.ItemsSource = _cats;
         foreach (var c in _cats) c.PropertyChanged += OnCategoryChanged;
+        WeeklyCheck.IsChecked = ScheduledClean.IsEnabled;
+    }
+
+    void Weekly_Click(object sender, RoutedEventArgs e)
+    {
+        bool on = WeeklyCheck.IsChecked == true;
+        try
+        {
+            ScheduledClean.SetEnabled(on);
+            StatusText.Text = on
+                ? "Weekly cleaning is on: every Sunday Kemptly quietly cleans temp files, caches and crash dumps (no admin areas, no Downloads, no Recycle Bin)."
+                : "Weekly cleaning is off.";
+        }
+        catch (Exception ex)
+        {
+            WeeklyCheck.IsChecked = !on;
+            Ui.Error("Couldn't change the schedule: " + ex.Message);
+        }
     }
 
     void OnCategoryChanged(object? sender, PropertyChangedEventArgs e)
@@ -91,6 +109,8 @@ public partial class CleanerPage : UserControl
             c.Files = files;
         }
 
+        History.Add(ChangeKind.FilesCleaned, $"Cleaned junk files, freed {Fmt.Bytes(freedTotal)}",
+            string.Join(", ", selected.Select(c => c.Name)));
         StatusText.Text = $"Done. Freed {Fmt.Bytes(freedTotal)}." +
             (failedTotal > 0 ? $" {failedTotal} files were skipped because they are in use or need admin rights." : "");
         SetBusy(false);

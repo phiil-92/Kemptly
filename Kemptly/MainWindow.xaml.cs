@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Kemptly.Core;
@@ -9,7 +8,7 @@ namespace Kemptly;
 public partial class MainWindow : Window
 {
     public static MainWindow Instance { get; private set; } = null!;
-    public const string RepoUrl = "https://github.com/phiil-92/Kemptly";
+    public const string RepoUrl = AppInfo.RepoUrl;
 
     readonly Dictionary<string, UserControl> _pages = new();
 
@@ -17,11 +16,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Instance = this;
-
-        // "1.1.2+<commit>" -> "v1.1.2"
-        var version = typeof(MainWindow).Assembly
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "";
-        VersionText.Text = "v" + version.Split('+')[0];
+        VersionText.Text = "v" + AppInfo.Version;
+        if (AppSettings.Current.CheckForUpdatesOnStart) Loaded += async (_, _) => await CheckForUpdateAsync();
 
         if (Admin.IsAdmin)
         {
@@ -52,6 +48,19 @@ public partial class MainWindow : Window
         else Nav.SelectedIndex = 0;
     }
 
+    /// <summary>Opt-in check (Settings): shows "update available" next to the version in the sidebar.</summary>
+    async Task CheckForUpdateAsync()
+    {
+        try
+        {
+            var info = await UpdateCheck.CheckAsync();
+            if (!info.IsNewer) return;
+            VersionText.Text = $"v{AppInfo.Version} (v{info.Latest} available)";
+            VersionLink.ToolTip = $"Kemptly {info.Latest} is available. Click to open GitHub.";
+        }
+        catch { /* offline: stay quiet */ }
+    }
+
     /// <summary>Switches to a page by its key and returns it.</summary>
     public UserControl Navigate(string key)
     {
@@ -75,6 +84,10 @@ public partial class MainWindow : Window
                 "network" => new NetworkPage(),
                 "security" => new SecurityPage(),
                 "tools" => new ToolsPage(),
+                "updates" => new UpdatesPage(),
+                "privacy" => new PrivacyPage(),
+                "history" => new HistoryPage(),
+                "settings" => new SettingsPage(),
                 _ => new DashboardPage(),
             };
             _pages[key] = page;

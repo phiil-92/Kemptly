@@ -1,0 +1,45 @@
+<UserControl x:Class="Kemptly.Views.BloatwareView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="0,12,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource Subtle}"
+                   Text="Store apps Windows installed for you. Removing them only affects your account, and you can reinstall any of them from the Microsoft Store (or with Undo on the History page)."/>
+        <WrapPanel Grid.Row="1" Margin="0,12,0,12">
+            <Button Content="Select recommended" Click="SelectRecommended_Click" Padding="14,6" Margin="0,0,8,0"/>
+            <Button x:Name="RemoveBtn" Content="Remove selected" Click="Remove_Click" Padding="14,6" Margin="0,0,8,0" Style="{DynamicResource AccentButtonStyle}"/>
+            <Button Content="Refresh" Click="Refresh_Click" Padding="14,6" Margin="0,0,16,0"/>
+            <ProgressBar x:Name="Busy" Width="120" IsIndeterminate="True" Visibility="Collapsed" VerticalAlignment="Center"/>
+        </WrapPanel>
+        <DataGrid x:Name="AppGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="None" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="48" CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="App" Width="1.4*" SortMemberPath="Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,6">
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Description}" Style="{StaticResource Subtle}" FontSize="12"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Recommendation" Binding="{Binding Category}" Width="*" ElementStyle="{StaticResource CellText}"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" ElementStyle="{StaticResource CellText}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock x:Name="StatusText" Grid.Row="3" Style="{StaticResource Subtle}" Margin="0,10,0,0"/>
+    </Grid>
+</UserControl>
