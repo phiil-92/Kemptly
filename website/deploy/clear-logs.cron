@@ -1,5 +1,0 @@
-# Empties the Kemptly website container's log every night at 04:00, so access logs are kept for at most one day
-# (as stated in the privacy policy). Install with:  sudo cp deploy/clear-logs.cron /etc/cron.d/kemptly-web-logs
-SHELL=/bin/sh
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-0 4 * * * root f=$(docker inspect --format '{{.LogPath}}' kemptly-web 2>/dev/null) && [ -n "$f" ] && truncate -s 0 "$f"

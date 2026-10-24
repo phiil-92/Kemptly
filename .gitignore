@@ -22,3 +22,9 @@ Installer/dialog.bmp
 
 # Local secrets/settings (e.g. website contact email)
 .env
+
+# Website deploy/setup files: kept locally and on the server, not published
+website/deploy/
+website/Dockerfile
+website/docker-compose.yml
+website/README.md
