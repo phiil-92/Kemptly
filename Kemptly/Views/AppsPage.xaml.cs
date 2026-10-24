@@ -47,7 +47,7 @@ public partial class AppsPage : UserControl
     {
         var app = Ui.Item<InstalledApp>(sender);
         if (app == null) return;
-        if (!Ui.Ask($"Start the uninstaller for \"{app.Name}\"?\n\nThe app's own uninstaller will open — follow its steps.", "Uninstall")) return;
+        if (!Ui.Ask($"Start the uninstaller for \"{app.Name}\"?\n\nThe app's own uninstaller will open - follow its steps.", "Uninstall")) return;
         try
         {
             InstalledApps.RunUninstaller(app);

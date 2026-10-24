@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -9,7 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Kemptly.ico</ApplicationIcon>
     <Product>Kemptly</Product>
-    <Description>Kemptly â€” PC cleanup, startup and security manager</Description>
+    <Description>Kemptly - PC cleanup, startup and security manager</Description>
     <AssemblyName>Kemptly</AssemblyName>
     <RootNamespace>Kemptly</RootNamespace>
     <Version>1.1.0</Version>

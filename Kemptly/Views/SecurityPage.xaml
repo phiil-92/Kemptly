@@ -24,7 +24,7 @@
         <StackPanel>
             <TextBlock Text="Security Scan" Style="{StaticResource PageTitle}"/>
             <TextBlock Style="{StaticResource Subtle}"
-                       Text="Looks for signs of malware: programs in odd places, disguised files, startup and task tricks, hijacked settings and weakened protection. It complements — doesn't replace — your antivirus."/>
+                       Text="Looks for signs of malware: programs in odd places, disguised files, startup and task tricks, hijacked settings and weakened protection. It complements - doesn't replace - your antivirus."/>
         </StackPanel>
 
         <WrapPanel Grid.Row="1" Style="{StaticResource Toolbar}">

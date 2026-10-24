@@ -1,4 +1,4 @@
-﻿# Builds dist\Kemptly-Setup.msi (self-contained â€” friends don't need .NET installed).
+# Builds dist\Kemptly-Setup.msi (self-contained - friends don't need .NET installed).
 # Usage: powershell -ExecutionPolicy Bypass -File build-installer.ps1 [-Version 1.2.0]
 param([string]$Version = "1.1.0")
 $ErrorActionPreference = 'Stop'

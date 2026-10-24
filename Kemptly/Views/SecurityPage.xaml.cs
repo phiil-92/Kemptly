@@ -54,8 +54,8 @@ public partial class SecurityPage : UserControl
             int high = result.Findings.Count(f => f.Severity == Severity.High);
             int med = result.Findings.Count(f => f.Severity == Severity.Medium);
             SetBusy(false, high + med == 0
-                ? $"Done — nothing serious found ({result.Findings.Count} informational notes)."
-                : $"Done — {high} high and {med} medium priority item(s) to review.");
+                ? $"Done - nothing serious found ({result.Findings.Count} informational notes)."
+                : $"Done - {high} high and {med} medium priority item(s) to review.");
         }
         catch (Exception ex)
         {

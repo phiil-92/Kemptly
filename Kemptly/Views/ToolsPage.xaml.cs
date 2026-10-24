@@ -57,7 +57,7 @@ public partial class ToolsPage : UserControl
         Log(code switch
         {
             -2 => $"{title}: cancelled (administrator permission was not given).",
-            0 when visible => $"{title}: opened in a separate window — follow its progress there.",
+            0 when visible => $"{title}: opened in a separate window - follow its progress there.",
             0 => $"{title}: done.",
             _ => $"{title}: finished with exit code {code}.",
         });
@@ -134,7 +134,7 @@ public partial class ToolsPage : UserControl
             return Elevated("Energy report", "cmd.exe", $"/c powercfg /energy /output \"{path}\" && start \"\" \"{path}\"", true);
         }),
 
-        new("", "Classic Disk Cleanup", "Windows' own cleaner — useful for removing an old Windows installation (Windows.old) after an upgrade.", "Open", false, () =>
+        new("", "Classic Disk Cleanup", "Windows' own cleaner - useful for removing an old Windows installation (Windows.old) after an upgrade.", "Open", false, () =>
         {
             Shell.Open("cleanmgr.exe");
             Log("Disk Cleanup opened. Tip: click 'Clean up system files' to see Windows.old and update leftovers.");

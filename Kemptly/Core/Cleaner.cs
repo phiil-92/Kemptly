@@ -152,7 +152,7 @@ public static class Cleaner
             false, true, () => [], isRecycleBin: true),
 
         new("Old downloads (90+ days)",
-            "Files in Downloads you haven't touched in 90 days. Off by default — open the folder and check before cleaning!",
+            "Files in Downloads you haven't touched in 90 days. Off by default - open the folder and check before cleaning!",
             false, false, () => [new CleanTarget(Native.GetDownloadsFolder(), MinAgeDays: 90, RemoveEmptyDirs: false)]),
     ];
 

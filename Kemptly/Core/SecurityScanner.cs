@@ -39,7 +39,7 @@ public class SecurityStatus
 
 /// <summary>
 /// Heuristic checks for common signs of malware, persistence tricks and weakened security settings.
-/// This is not an antivirus — it points out things worth a closer look.
+/// This is not an antivirus - it points out things worth a closer look.
 /// </summary>
 public static class SecurityScanner
 {
@@ -294,7 +294,7 @@ public static class SecurityScanner
                     Severity = signed ? Severity.Low : Severity.High, Category = "Processes",
                     Title = $"{(signed ? "" : "Unsigned ")}program {loc}: {p.Name}",
                     Detail = signed
-                        ? $"Signed by {Signature.Check(p.Path).Publisher}. Installers often run from here — fine if you just started one."
+                        ? $"Signed by {Signature.Check(p.Path).Publisher}. Installers often run from here - fine if you just started one."
                         : "Unsigned programs running from this location are a common sign of malware. If you don't recognise it, end it and scan with Defender.",
                     Path = p.Path, Pid = p.Pid,
                 });
@@ -566,7 +566,7 @@ public static class SecurityScanner
                     {
                         Severity = Severity.High, Category = "Files",
                         Title = $"Disguised program: {f.Name}",
-                        Detail = "This looks like a document or picture but is actually a program. Don't open it — delete it.",
+                        Detail = "This looks like a document or picture but is actually a program. Don't open it - delete it.",
                         Path = f.FullName, CanDeleteFile = true,
                     });
                 else if (f.Name.Contains('\u202E'))

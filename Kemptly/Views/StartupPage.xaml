@@ -12,7 +12,7 @@
         <StackPanel>
             <TextBlock Text="Startup" Style="{StaticResource PageTitle}"/>
             <TextBlock Style="{StaticResource Subtle}"
-                       Text="Stop programs from launching when you sign in. Unticking an entry disables it (just like Task Manager) — you can turn it back on any time."/>
+                       Text="Stop programs from launching when you sign in. Unticking an entry disables it (just like Task Manager) - you can turn it back on any time."/>
         </StackPanel>
 
         <WrapPanel Grid.Row="1" Style="{StaticResource Toolbar}">

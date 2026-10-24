@@ -55,7 +55,7 @@ public partial class NetworkPage : UserControl
                 Pid = c.Pid,
                 ProcessPath = path,
                 Local = Network.Format(c.LocalAddress, c.LocalPort),
-                Remote = c.State == "Listening" ? "—" : Network.Format(c.RemoteAddress, c.RemotePort),
+                Remote = c.State == "Listening" ? "-" : Network.Format(c.RemoteAddress, c.RemotePort),
                 RemoteIp = remoteIp.ToString(),
                 State = c.State,
                 IsPublic = c.State != "Listening" && Network.IsPublic(c.RemoteAddress),
@@ -79,7 +79,7 @@ public partial class NetworkPage : UserControl
         ConnGrid.ItemsSource = list;
         int unsigned = list.Where(r => r.Signed == "UNSIGNED").Select(r => r.Pid).Distinct().Count();
         StatusText.Text = $"{list.Count} connections shown · {_all.Count(r => r.IsPublic)} to the internet" +
-                          (unsigned > 0 ? $" · {unsigned} unsigned program(s) — check them" : "");
+                          (unsigned > 0 ? $" · {unsigned} unsigned program(s) - check them" : "");
     }
 
     /// <summary>Reverse-DNS lookups for public IPs, done once per IP in the background.</summary>

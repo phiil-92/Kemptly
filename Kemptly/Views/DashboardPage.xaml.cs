@@ -87,11 +87,11 @@ public partial class DashboardPage : UserControl
             var media = S("Media") is "Unspecified" or "" ? "" : S("Media") + " · ";
             var health = S("Health");
             return new DiskRow(S("Name"), $"{media}{S("Bus")} · {Fmt.Bytes(size)}",
-                health == "Healthy" ? "✔ Healthy" : $"⚠ {health}");
+                health == "Healthy" ? "Healthy" : $"Warning: {health}");
         }).ToList();
         DisksList.ItemsSource = rows;
         DisksStatus.Text = rows.Any(r => !r.Health.Contains("Healthy"))
-            ? "A disk reports a problem — back up your data soon!"
+            ? "A disk reports a problem - back up your data soon!"
             : "Health status reported by the drives themselves (S.M.A.R.T.).";
     }
 

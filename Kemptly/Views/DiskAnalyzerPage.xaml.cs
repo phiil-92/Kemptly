@@ -46,7 +46,7 @@ public partial class DiskAnalyzerPage : UserControl
                 Margin = new Thickness(0, 0, 6, 0),
                 FontSize = 12,
                 Tag = d.Name,
-                ToolTip = $"{d.VolumeLabel}  —  {Fmt.Bytes(used)} used of {Fmt.Bytes(d.TotalSize)}",
+                ToolTip = $"{d.VolumeLabel}  -  {Fmt.Bytes(used)} used of {Fmt.Bytes(d.TotalSize)}",
             };
             btn.Click += (_, _) => { PathBox.Text = (string)btn.Tag; StartScan(); };
             DrivePanel.Children.Add(btn);
