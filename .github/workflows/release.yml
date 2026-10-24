@@ -24,7 +24,7 @@ jobs:
       - name: Build installer
         shell: pwsh
         run: |
-          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart('v') } else { "1.2.0" }
+          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart('v') } else { "1.2.1" }
           ./build-installer.ps1 -Version $v
 
       - name: Prepare files
