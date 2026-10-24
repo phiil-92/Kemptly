@@ -7,7 +7,7 @@
 **Clean up, speed up and check your Windows 11 PC - all in one small, fast app.**
 
 [![Download](https://img.shields.io/badge/Download-Kemptly--Setup.msi-2563EB?style=for-the-badge&logo=windows11&logoColor=white)](../../releases/latest)
-[![Website](https://img.shields.io/badge/Website-kemptly.toritech.net-06B6D4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://kemptly.toritech.net)
+[![Website](https://img.shields.io/badge/Website-kemptly.app-06B6D4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://kemptly.app)
 
 ![Windows 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?logo=windows&logoColor=white)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
@@ -79,7 +79,7 @@
 
 ## Install
 
-1. Download **`Kemptly-Setup.msi`** from the [latest release](../../releases/latest) or from the website, [kemptly.toritech.net](https://kemptly.toritech.net).
+1. Download **`Kemptly-Setup.msi`** from the [latest release](../../releases/latest) or from the website, [kemptly.app](https://kemptly.app).
 2. Double-click it and follow the steps. No administrator rights needed - it installs just for your account.
 3. Windows may show *"Windows protected your PC"* because the installer isn't code-signed: click **More info → Run anyway**.
 

@@ -65,7 +65,7 @@ public partial class SettingsPage : UserControl
         finally { CheckNowBtn.IsEnabled = true; }
     }
 
-    void Website_Click(object sender, RoutedEventArgs e) => Shell.Open("https://kemptly.toritech.net");
+    void Website_Click(object sender, RoutedEventArgs e) => Shell.Open("https://kemptly.app");
     void GitHub_Click(object sender, RoutedEventArgs e) => Shell.Open(AppInfo.RepoUrl);
     void Bug_Click(object sender, RoutedEventArgs e) => Shell.Open(AppInfo.RepoUrl + "/issues/new");
 
