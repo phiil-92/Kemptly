@@ -1,6 +1,6 @@
-name: Build installer
+﻿name: Build installer
 
-# Builds WinTidy-Setup.msi + a portable exe.
+# Builds Kemptly-Setup.msi + a portable exe.
 # Push a tag like v1.1.0 to create a GitHub release with both files attached,
 # or run it manually from the Actions tab to just get the build artifacts.
 on:
@@ -24,19 +24,19 @@ jobs:
       - name: Build installer
         shell: pwsh
         run: |
-          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart('v') } else { "1.0.0" }
+          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart('v') } else { "1.1.0" }
           ./build-installer.ps1 -Version $v
 
       - name: Prepare files
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force out | Out-Null
-          Copy-Item dist/WinTidy-Setup.msi out/
-          Copy-Item build/selfcontained/WinTidy.exe out/WinTidy-portable.exe
+          Copy-Item dist/Kemptly-Setup.msi out/
+          Copy-Item build/selfcontained/Kemptly.exe out/Kemptly-portable.exe
 
       - uses: actions/upload-artifact@v4
         with:
-          name: WinTidy
+          name: Kemptly
           path: out/*
 
       - name: Create release
@@ -48,4 +48,4 @@ jobs:
           # If the release already exists (e.g. created by hand), just refresh its files.
           gh release view "${{ github.ref_name }}" *> $null
           if ($LASTEXITCODE -eq 0) { gh release upload "${{ github.ref_name }}" out/* --clobber }
-          else { gh release create "${{ github.ref_name }}" out/* --title "WinTidy ${{ github.ref_name }}" --generate-notes }
+          else { gh release create "${{ github.ref_name }}" out/* --title "Kemptly ${{ github.ref_name }}" --generate-notes }

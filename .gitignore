@@ -3,7 +3,7 @@ bin/
 obj/
 build/
 dist/
-WinTidy-app/
+Kemptly-app/
 *.msi
 *.wixpdb
 

@@ -1,19 +1,19 @@
 <div align="center">
 
-<img src="docs/logo.png" width="112" alt="WinTidy logo">
+<img src="docs/logo.png" width="112" alt="Kemptly logo">
 
-# WinTidy
+# Kemptly
 
 **Clean up, speed up and check your Windows 11 PC — all in one small, fast app.**
 
-[![Download](https://img.shields.io/badge/Download-WinTidy--Setup.msi-2563EB?style=for-the-badge&logo=windows11&logoColor=white)](../../releases/latest)
+[![Download](https://img.shields.io/badge/Download-Kemptly--Setup.msi-2563EB?style=for-the-badge&logo=windows11&logoColor=white)](../../releases/latest)
 
 ![Windows 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?logo=windows&logoColor=white)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
 ![No admin needed](https://img.shields.io/badge/install-no%20admin%20needed-06B6D4)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-<img src="docs/screenshots/dashboard.png" width="860" alt="WinTidy dashboard">
+<img src="docs/screenshots/dashboard.png" width="860" alt="Kemptly dashboard">
 
 </div>
 
@@ -43,7 +43,7 @@
 - **Disguised files** like `invoice.pdf.exe` or right-to-left filename tricks
 - Status of **Defender, virus definitions, firewall and UAC**, plus Defender exclusions
 
-> WinTidy complements your antivirus — it doesn't replace it.
+> Kemptly complements your antivirus — it doesn't replace it.
 
 ## 📸 Screenshots
 
@@ -68,13 +68,15 @@
 
 ## ⬇️ Install
 
-1. Download **`WinTidy-Setup.msi`** from the [latest release](../../releases/latest).
+1. Download **`Kemptly-Setup.msi`** from the [latest release](../../releases/latest).
 2. Double-click it and follow the steps. No administrator rights needed — it installs just for your account.
 3. Windows may show *"Windows protected your PC"* because the installer isn't code-signed: click **More info → Run anyway**.
 
-Prefer no installer? Grab **`WinTidy-portable.exe`** from the same release and run it from anywhere.
+Prefer no installer? Grab **`Kemptly-portable.exe`** from the same release and run it from anywhere.
 
-**Uninstall:** *Settings → Apps → Installed apps → WinTidy → Uninstall.*
+**Uninstall:** *Settings → Apps → Installed apps → Kemptly → Uninstall.*
+
+> Kemptly was called **WinTidy** in version 1.0. Installing Kemptly automatically replaces an existing WinTidy installation.
 
 Some features (Windows temp / update cleanup, services, all-users startup entries) need admin rights — use **Restart as administrator** in the sidebar.
 
@@ -90,20 +92,20 @@ Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/d
 
 ```powershell
 # Run the app
-dotnet run --project WinTidy
+dotnet run --project Kemptly
 
-# Build the installer → dist\WinTidy-Setup.msi (self-contained, no .NET needed on target PCs)
-powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.0.0
+# Build the installer → dist\Kemptly-Setup.msi (self-contained, no .NET needed on target PCs)
+powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.1.0
 ```
 
 Releases are built automatically by GitHub Actions: push a tag like `v1.1.0` and the workflow attaches the MSI and portable exe to a new release.
 
-Handy for shortcuts: `WinTidy.exe --page cleaner|disk|apps|startup|processes|services|network|security|tools [--scan]`
+Handy for shortcuts: `Kemptly.exe --page cleaner|disk|apps|startup|processes|services|network|security|tools [--scan]`
 
 ### Project layout
 
 ```
-WinTidy/            WPF app (C#, .NET 10, Fluent theme)
+Kemptly/            WPF app (C#, .NET 10, Fluent theme)
   Core/             Cleaner, startup, services, network, security-scan logic
   Views/            One page per sidebar entry
   Assets/           Logo + make-icon.ps1 (regenerates the .ico)

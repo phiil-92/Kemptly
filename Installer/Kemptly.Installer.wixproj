@@ -1,0 +1,18 @@
+﻿<Project Sdk="WixToolset.Sdk/5.0.2">
+
+  <PropertyGroup>
+    <OutputName>Kemptly-Setup</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <!-- Self-contained single-file build: dotnet publish ..\Kemptly (see build-installer.ps1) -->
+    <AppExe>..\build\selfcontained\Kemptly.exe</AppExe>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">1.1.0</ProductVersion>
+    <DefineConstants>AppExe=$(AppExe);Version=$(ProductVersion)</DefineConstants>
+    <SuppressPdbOutput>true</SuppressPdbOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
+  </ItemGroup>
+
+</Project>

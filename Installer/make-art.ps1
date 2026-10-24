@@ -2,7 +2,7 @@
 Add-Type -AssemblyName System.Drawing
 $ErrorActionPreference = 'Stop'
 $dir = $PSScriptRoot
-$logo = [System.Drawing.Image]::FromFile((Join-Path $dir '..\WinTidy\Assets\logo.png'))
+$logo = [System.Drawing.Image]::FromFile((Join-Path $dir '..\Kemptly\Assets\logo.png'))
 
 function New-Gradient($w, $h) {
     New-Object System.Drawing.Drawing2D.LinearGradientBrush(
@@ -19,7 +19,7 @@ $g.FillRectangle((New-Gradient 164 312), 0, 0, 164, 312)
 $g.DrawImage($logo, 34, 70, 96, 96)
 $font = New-Object System.Drawing.Font 'Segoe UI Semibold', 17
 $fmt = New-Object System.Drawing.StringFormat; $fmt.Alignment = 'Center'
-$g.DrawString('WinTidy', $font, [System.Drawing.Brushes]::White, (New-Object System.Drawing.RectangleF 0, 180, 164, 40), $fmt)
+$g.DrawString('Kemptly', $font, [System.Drawing.Brushes]::White, (New-Object System.Drawing.RectangleF 0, 180, 164, 40), $fmt)
 $small = New-Object System.Drawing.Font 'Segoe UI', 8.5
 $g.DrawString("Clean up, speed up`nand check your PC", $small, (New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(230, 255, 255, 255))), (New-Object System.Drawing.RectangleF 0, 214, 164, 40), $fmt)
 $g.Dispose()
