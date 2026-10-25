@@ -11,7 +11,7 @@
 
 ![Windows 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?logo=windows&logoColor=white)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
-![No admin needed](https://img.shields.io/badge/install-no%20admin%20needed-06B6D4)
+![No admin needed to install](https://img.shields.io/badge/install-no%20admin%20needed-06B6D4)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
 <img src="docs/screenshots/dashboard.png" width="860" alt="Kemptly dashboard">
@@ -24,16 +24,16 @@
 
 | | |
 |---|---|
-| **Junk Cleaner** | Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser & app caches, developer caches and the Recycle Bin - then frees the space with one click. Optional weekly automatic cleaning. |
+| **Junk Cleaner** | Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser & app caches, developer caches and the Recycle Bin - then frees the space once you have reviewed the list. Optional weekly automatic cleaning. |
 | **Disk Analyzer** | See which folders and file types fill your drive, list the largest files, find **duplicate files** by content, and spot big space users like restore points, old Windows installs, WSL/Docker disks and `node_modules`. |
 | **Installed Apps** | Every desktop program with its size and install date. After an uninstall, a **leftover scan** finds the folders, registry keys, shortcuts, startup entries and tasks left behind (with undo), plus a **forced uninstall** for broken uninstallers and a **bloatware remover** for preinstalled Store apps (reinstallable from the Store). |
 | **App Updates** | Finds outdated programs with winget (built into Windows) and updates them one by one or all at once. |
 | **Startup** | Stop apps and scheduled tasks from launching with Windows. Disabling is reversible and uses the same mechanism as Task Manager. |
 | **Services** | Third-party background services at a glance; switch updaters and helpers to *Manual* or *Disabled*. |
 | **Processes** | Live CPU and memory per app, grouped like Task Manager, with *End task*. |
-| **Network** | Which programs are talking to the internet right now, with host names and signature checks. **Block** any program from the internet with one click (Windows Firewall, reversible). |
+| **Network** | Which programs are talking to the internet right now, with host names and signature checks. **Block** any program from the internet with a Windows Firewall rule you can undo. |
 | **Privacy** | Reversible switches for Windows tracking, ads, suggestions, web results in Start search, Recall and Copilot, plus a switch that turns off the telemetry services and data collection tasks. |
-| **Security Scan** | Heuristic checks for signs of malware (see below), a **browser extension check** for Chrome, Edge, Brave, Opera, Vivaldi and Firefox, plus one-click Microsoft Defender scans. |
+| **Security Scan** | Heuristic checks for signs of malware (see below), a **browser extension check** for Chrome, Edge, Brave, Opera, Vivaldi and Firefox, plus Microsoft Defender scans from the same page. |
 | **Tools** | Flush DNS, restart Explorer, turn off hibernation, SFC / DISM repair, component-store cleanup, restore points, network reset, battery & energy reports, **crash history** in plain language and an exportable **PC report**. |
 | **History** | Every change Kemptly makes is logged, with **Undo** where possible. |
 
@@ -80,7 +80,7 @@
 ## Install
 
 1. Download **`Kemptly-Setup.msi`** from the [latest release](../../releases/latest) or from the website, [kemptly.app](https://kemptly.app).
-2. Double-click it and follow the steps. No administrator rights needed - it installs just for your account.
+2. Double-click it and follow the steps. Installing needs no administrator rights - it installs just for your account.
 3. Windows may show *"Windows protected your PC"* because the installer isn't code-signed: click **More info → Run anyway**.
 
 Prefer no installer? Grab **`Kemptly-portable.exe`** from the same release and run it from anywhere.
