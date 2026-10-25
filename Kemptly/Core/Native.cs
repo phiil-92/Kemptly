@@ -5,6 +5,48 @@ namespace Kemptly.Core;
 
 internal static class Native
 {
+    // ---- Service configuration (through the Service Control Manager, so changes apply without a restart) ----
+    [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern IntPtr OpenSCManager(string? machine, string? database, uint access);
+
+    [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern IntPtr OpenService(IntPtr scm, string name, uint access);
+
+    [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool ChangeServiceConfig(IntPtr service, uint type, uint startType, uint errorControl, string? binaryPath,
+        string? loadOrderGroup, IntPtr tagId, string? dependencies, string? startName, string? password, string? displayName);
+
+    [DllImport("advapi32.dll", SetLastError = true)]
+    public static extern bool ChangeServiceConfig2(IntPtr service, uint infoLevel, ref int info);
+
+    [DllImport("advapi32.dll", SetLastError = true)]
+    public static extern bool CloseServiceHandle(IntPtr handle);
+
+    /// <summary>Sets a service's start type: 2 automatic, 3 manual, 4 disabled; delayed applies to automatic.</summary>
+    public static void SetServiceStartType(string name, int start, bool delayed = false)
+    {
+        const uint SC_MANAGER_CONNECT = 0x1, SERVICE_CHANGE_CONFIG = 0x2, SERVICE_NO_CHANGE = 0xFFFFFFFF, DELAYED_AUTO_START_INFO = 3;
+        IntPtr scm = OpenSCManager(null, null, SC_MANAGER_CONNECT);
+        if (scm == IntPtr.Zero) throw new System.ComponentModel.Win32Exception();
+        try
+        {
+            IntPtr svc = OpenService(scm, name, SERVICE_CHANGE_CONFIG);
+            if (svc == IntPtr.Zero) throw new System.ComponentModel.Win32Exception();
+            try
+            {
+                if (!ChangeServiceConfig(svc, SERVICE_NO_CHANGE, (uint)start, SERVICE_NO_CHANGE, null, null, IntPtr.Zero, null, null, null, null))
+                    throw new System.ComponentModel.Win32Exception();
+                if (start == 2)
+                {
+                    int flag = delayed ? 1 : 0;
+                    ChangeServiceConfig2(svc, DELAYED_AUTO_START_INFO, ref flag);
+                }
+            }
+            finally { CloseServiceHandle(svc); }
+        }
+        finally { CloseServiceHandle(scm); }
+    }
+
     // ---- Memory / CPU ----
     [StructLayout(LayoutKind.Sequential)]
     public struct MEMORYSTATUSEX

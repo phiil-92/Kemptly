@@ -32,7 +32,7 @@
 | **Services** | Third-party background services at a glance; switch updaters and helpers to *Manual* or *Disabled*. |
 | **Processes** | Live CPU and memory per app, grouped like Task Manager, with *End task*. |
 | **Network** | Which programs are talking to the internet right now, with host names and signature checks. **Block** any program from the internet with one click (Windows Firewall, reversible). |
-| **Privacy** | Reversible switches for Windows tracking, ads, suggestions, web results in Start search, Recall and Copilot. |
+| **Privacy** | Reversible switches for Windows tracking, ads, suggestions, web results in Start search, Recall and Copilot, plus a switch that turns off the telemetry services and data collection tasks. |
 | **Security Scan** | Heuristic checks for signs of malware (see below), a **browser extension check** for Chrome, Edge, Brave, Opera, Vivaldi and Firefox, plus one-click Microsoft Defender scans. |
 | **Tools** | Flush DNS, restart Explorer, turn off hibernation, SFC / DISM repair, component-store cleanup, restore points, network reset, battery & energy reports, **crash history** in plain language and an exportable **PC report**. |
 | **History** | Every change Kemptly makes is logged, with **Undo** where possible. |
@@ -106,7 +106,7 @@ Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/d
 dotnet run --project Kemptly
 
 # Build the installer → dist\Kemptly-Setup.msi (self-contained, no .NET needed on target PCs)
-powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.3.1
+powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.3.2
 ```
 
 Releases are built automatically by GitHub Actions: push a tag like `v1.1.0` and the workflow attaches the MSI and portable exe to a new release.

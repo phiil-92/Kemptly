@@ -297,6 +297,32 @@ public static class TaskSchedulerReader
         };
     }
 
+    static (string Folder, string Name) Split(string fullPath)
+    {
+        int i = fullPath.LastIndexOf('\\');
+        return (i <= 0 ? "\\" : fullPath[..i], fullPath[(i + 1)..]);
+    }
+
+    /// <summary>Whether a task (e.g. \Microsoft\Windows\Autochk\Proxy) is enabled, or null if it doesn't exist.</summary>
+    public static bool? GetEnabled(string fullPath)
+    {
+        try
+        {
+            var (folder, name) = Split(fullPath);
+            dynamic svc = Connect();
+            return (bool)svc.GetFolder(folder).GetTask(name).Enabled;
+        }
+        catch { return null; }
+    }
+
+    /// <summary>Enables or disables a task by its full path. Throws if it can't (e.g. needs admin).</summary>
+    public static void SetEnabled(string fullPath, bool enabled)
+    {
+        var (folder, name) = Split(fullPath);
+        dynamic svc = Connect();
+        svc.GetFolder(folder).GetTask(name).Enabled = enabled;
+    }
+
     /// <summary>Deletes a task and returns its XML definition, so it can be registered again (undo).</summary>
     public static string Delete(TaskItem item)
     {

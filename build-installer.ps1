@@ -1,6 +1,6 @@
 # Builds dist\Kemptly-Setup.msi (self-contained - friends don't need .NET installed).
-# Usage: powershell -ExecutionPolicy Bypass -File build-installer.ps1 [-Version 1.3.1]
-param([string]$Version = "1.3.1")
+# Usage: powershell -ExecutionPolicy Bypass -File build-installer.ps1 [-Version 1.3.2]
+param([string]$Version = "1.3.2")
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 

@@ -66,15 +66,12 @@ public static class ServiceManager
         return list;
     }
 
-    /// <summary>Changes how a service starts (registry Start value). Needs admin.</summary>
+    /// <summary>Changes how a service starts, through the Service Control Manager so it applies right away. Needs admin.</summary>
     public static void SetStartType(ServiceItem s, string type, bool log = true)
     {
-        using var key = Registry.LocalMachine.OpenSubKey(ServicesKey + s.Name, true)
-                        ?? throw new InvalidOperationException("Service not found.");
         int start = type switch { "Automatic" or "Automatic (Delayed)" => 2, "Manual" => 3, "Disabled" => 4, _ => throw new ArgumentException(type) };
         var previous = s.StartType;
-        key.SetValue("Start", start, RegistryValueKind.DWord);
-        if (start == 2) key.SetValue("DelayedAutostart", type == "Automatic (Delayed)" ? 1 : 0, RegistryValueKind.DWord);
+        Native.SetServiceStartType(s.Name, start, type == "Automatic (Delayed)");
         s.StartType = type;
         if (log && previous != "")
             History.Add(ChangeKind.ServiceStartType, $"Set service \"{s.DisplayName}\" to {type}", $"Was: {previous}",

@@ -74,7 +74,7 @@ public static class Admin
     }
 
     public static bool IsAccessDenied(Exception ex) =>
-        ex is UnauthorizedAccessException or System.Security.SecurityException
+        ex is UnauthorizedAccessException or System.Security.SecurityException or Win32Exception { NativeErrorCode: 5 }
         || ex.HResult == unchecked((int)0x80070005)
         || ex.InnerException is { } inner && IsAccessDenied(inner);
 }
