@@ -56,13 +56,36 @@ public partial class SettingsPage : UserControl
             if (info.IsNewer)
             {
                 UpdateText.Text = $"Version {info.Latest} is available.";
-                if (Ui.Ask($"Kemptly {info.Latest} is available (you have {AppInfo.Version}). Open the download page?", "Update available"))
-                    Shell.Open(info.Url);
+                await OfferUpdateAsync(info, s => UpdateText.Text = s);
             }
             else UpdateText.Text = $"You have the latest version ({AppInfo.Version}).";
         }
         catch (Exception ex) { UpdateText.Text = "Couldn't check: " + ex.Message; }
         finally { CheckNowBtn.IsEnabled = true; }
+    }
+
+    /// <summary>Asks to install an available update; on yes downloads, verifies and installs it, then restarts Kemptly.</summary>
+    public static async Task OfferUpdateAsync(UpdateInfo info, Action<string> report)
+    {
+        if (!UpdateCheck.CanInstall(info))
+        {
+            if (Ui.Ask($"Kemptly {info.Latest} is available (you have {AppInfo.Version}). Open the download page?", "Update available"))
+                Shell.Open(info.Url);
+            return;
+        }
+        if (!Ui.Ask($"Kemptly {info.Latest} is available (you have {AppInfo.Version}).\n\nInstall it now? Kemptly downloads it from GitHub, " +
+                    "checks it, then closes, updates and starts again.", "Update available")) return;
+        try
+        {
+            await UpdateCheck.InstallAsync(info, new Progress<string>(report));
+            Application.Current.Shutdown();
+        }
+        catch (Exception ex)
+        {
+            report("Update failed.");
+            if (Ui.Ask($"The update couldn't be installed:\n{ex.Message}\n\nOpen the download page instead?", "Update failed"))
+                Shell.Open(info.Url);
+        }
     }
 
     void Website_Click(object sender, RoutedEventArgs e) => Shell.Open("https://kemptly.app");

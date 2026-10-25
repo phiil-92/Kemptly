@@ -55,11 +55,14 @@ public partial class MainWindow : Window
         {
             var info = await UpdateCheck.CheckAsync();
             if (!info.IsNewer) return;
+            _update = info;
             VersionText.Text = $"v{AppInfo.Version} (v{info.Latest} available)";
-            VersionLink.ToolTip = $"Kemptly {info.Latest} is available. Click to open GitHub.";
+            VersionLink.ToolTip = $"Kemptly {info.Latest} is available. Click to install it.";
         }
         catch { /* offline: stay quiet */ }
     }
+
+    UpdateInfo? _update;
 
     /// <summary>Switches to a page by its key and returns it.</summary>
     public UserControl Navigate(string key)
@@ -103,5 +106,9 @@ public partial class MainWindow : Window
 
     void Elevate_Click(object sender, RoutedEventArgs e) => Admin.RestartElevated();
 
-    void Version_Click(object sender, RoutedEventArgs e) => Shell.Open(RepoUrl);
+    async void Version_Click(object sender, RoutedEventArgs e)
+    {
+        if (_update != null) await SettingsPage.OfferUpdateAsync(_update, s => VersionText.Text = s);
+        else Shell.Open(RepoUrl);
+    }
 }

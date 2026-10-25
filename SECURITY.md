@@ -7,6 +7,9 @@
   App Updates page (winget, which downloads updates from the app makers), "Check for updates now" in Settings (asks GitHub
   for the latest release number; optional at startup, off by default), reverse-DNS lookups on the Network page and
   Microsoft Defender's own definition updates.
+- **Self-update only when you click Install.** Kemptly downloads the new version only from this repository's GitHub
+  releases and checks its SHA-256 against the checksum GitHub publishes for the file before running it. Installed copies
+  update through the MSI (no admin needed), the portable exe replaces itself.
 - **Nothing runs in the background by default.** The installer adds no service, scheduled task or startup entry. The
   only exception is optional: "Clean automatically every week" creates a scheduled task that runs as you (no admin) once a
   week to clean the safe junk categories, and is removed again when you turn it off.

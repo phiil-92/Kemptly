@@ -35,7 +35,7 @@
                 <StackPanel>
                     <CheckBox x:Name="AutoUpdateCheck" Content="Check for a new Kemptly version when the app starts" Click="Option_Click"/>
                     <TextBlock Style="{StaticResource Subtle}" FontSize="12" Margin="28,0,0,10"
-                               Text="Off by default. When on, Kemptly asks GitHub for the latest release number. Nothing else is sent, and nothing is downloaded automatically."/>
+                               Text="Off by default. When on, Kemptly asks GitHub for the latest release number. Nothing else is sent, and an update is only downloaded when you click Install."/>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="CheckNowBtn" Content="Check for updates now" Click="CheckNow_Click" Padding="14,6"/>
                         <TextBlock x:Name="UpdateText" Style="{StaticResource Subtle}" VerticalAlignment="Center" Margin="14,0,0,0"/>
