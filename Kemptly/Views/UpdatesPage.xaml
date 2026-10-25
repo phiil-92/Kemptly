@@ -42,7 +42,19 @@
                     <DataGridTextColumn Header="App" Binding="{Binding Name}" Width="2*" ElementStyle="{StaticResource CellText}"/>
                     <DataGridTextColumn Header="Installed" Binding="{Binding Current}" Width="*" ElementStyle="{StaticResource CellText}"/>
                     <DataGridTextColumn Header="Available" Binding="{Binding Available}" Width="*" ElementStyle="{StaticResource CellText}"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1.5*" ElementStyle="{StaticResource CellText}"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1.5*">
+                        <DataGridTextColumn.ElementStyle>
+                            <!-- Error texts can be long: hovering shows the whole message -->
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CellText}">
+                                <Setter Property="ToolTip" Value="{Binding Status}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="">
+                                        <Setter Property="ToolTip" Value="{x:Null}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn Width="100" CanUserSort="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

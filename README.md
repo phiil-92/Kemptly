@@ -26,7 +26,7 @@
 |---|---|
 | **Junk Cleaner** | Finds temp files, Windows Update leftovers, crash dumps, GPU shader caches, browser & app caches, developer caches and the Recycle Bin - then frees the space with one click. Optional weekly automatic cleaning. |
 | **Disk Analyzer** | See which folders and file types fill your drive, list the largest files, find **duplicate files** by content, and spot big space users like restore points, old Windows installs, WSL/Docker disks and `node_modules`. |
-| **Installed Apps** | Every desktop program with its size and install date, plus a **bloatware remover** for preinstalled Store apps (reinstallable from the Store). |
+| **Installed Apps** | Every desktop program with its size and install date. After an uninstall, a **leftover scan** finds the folders, registry keys, shortcuts, startup entries and tasks left behind (with undo), plus a **forced uninstall** for broken uninstallers and a **bloatware remover** for preinstalled Store apps (reinstallable from the Store). |
 | **App Updates** | Finds outdated programs with winget (built into Windows) and updates them one by one or all at once. |
 | **Startup** | Stop apps and scheduled tasks from launching with Windows. Disabling is reversible and uses the same mechanism as Task Manager. |
 | **Services** | Third-party background services at a glance; switch updaters and helpers to *Manual* or *Disabled*. |
@@ -106,7 +106,7 @@ Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/d
 dotnet run --project Kemptly
 
 # Build the installer → dist\Kemptly-Setup.msi (self-contained, no .NET needed on target PCs)
-powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.2.1
+powershell -ExecutionPolicy Bypass -File build-installer.ps1 -Version 1.3.0
 ```
 
 Releases are built automatically by GitHub Actions: push a tag like `v1.1.0` and the workflow attaches the MSI and portable exe to a new release.

@@ -7,7 +7,7 @@ public enum ChangeKind
 {
     StartupToggle, StartupRemoved, TaskToggle, ServiceStartType, ServiceStartStop,
     FilesCleaned, FilesDeleted, AppUninstalled, BloatwareRemoved, ProcessEnded,
-    PrivacyTweak, FirewallBlock, ScheduledClean, Hibernation, Other,
+    PrivacyTweak, FirewallBlock, ScheduledClean, Hibernation, Other, LeftoversRemoved,
 }
 
 public class ChangeEntry : ObservableObject
@@ -102,6 +102,8 @@ public static class History
         ChangeKind.Hibernation => D(e, "enabled") == "False" ? "Turn back on" : null,
         ChangeKind.BloatwareRemoved => D(e, "familyName") != "" ? "Reinstall from Store" : null,
         ChangeKind.FilesDeleted => D(e, "recycled") == "True" ? "Open Recycle Bin" : null,
+        ChangeKind.LeftoversRemoved => D(e, "reg") != "" || D(e, "tasks") != "" ? "Undo"
+                                     : D(e, "recycled") == "True" ? "Open Recycle Bin" : null,
         _ => null,
     };
 
@@ -160,6 +162,12 @@ public static class History
             case ChangeKind.FilesDeleted:
                 Shell.Open("shell:RecycleBinFolder");
                 return "The files are in the Recycle Bin: select them, right-click and choose Restore.";
+            case ChangeKind.LeftoversRemoved when D(e, "reg") == "" && D(e, "tasks") == "":
+                Shell.Open("shell:RecycleBinFolder");
+                return "The files are in the Recycle Bin: select them, right-click and choose Restore.";
+            case ChangeKind.LeftoversRemoved:
+                result = await Leftovers.UndoAsync(e.Data);
+                break;
             default:
                 throw new InvalidOperationException("This change can't be undone.");
         }

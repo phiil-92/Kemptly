@@ -59,8 +59,64 @@ public partial class AppsPage : UserControl
         {
             InstalledApps.RunUninstaller(app);
             History.Add(ChangeKind.AppUninstalled, $"Started the uninstaller for {app.Name}", app.UninstallString);
-            StatusText.Text = $"Uninstaller for {app.Name} started. Press Refresh when it's finished.";
+            WatchUninstall(app);
         }
-        catch (Exception ex) { Ui.Error($"Could not start the uninstaller:\n{ex.Message}\n\nCommand: {app.UninstallString}"); }
+        catch (Exception ex)
+        {
+            Ui.Error($"Could not start the uninstaller:\n{ex.Message}\n\nCommand: {app.UninstallString}\n\n" +
+                     "If the uninstaller is missing, use the ... button next to Uninstall and choose Forced uninstall.");
+        }
+    }
+
+    readonly HashSet<string> _watching = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Waits until the app's uninstall entry disappears (its uninstaller finished), then offers to remove leftovers.</summary>
+    async void WatchUninstall(InstalledApp app)
+    {
+        var id = app.Hive + "\\" + app.KeyPath;
+        if (!_watching.Add(id)) return;
+        StatusText.Text = $"Waiting for the {app.Name} uninstaller to finish… Kemptly then looks for leftovers.";
+        var until = DateTime.Now.AddMinutes(30);
+        try
+        {
+            while (DateTime.Now < until)
+            {
+                await Task.Delay(2000);
+                if (InstalledApps.StillInstalled(app)) continue;
+                Refresh();
+                ShowLeftovers(app, forced: false);
+                return;
+            }
+            StatusText.Text = $"{app.Name} still seems to be installed. If its uninstaller failed, try Forced uninstall from the ... menu.";
+        }
+        finally { _watching.Remove(id); }
+    }
+
+    void ShowLeftovers(InstalledApp app, bool forced)
+    {
+        var w = new LeftoversWindow(app, forced);
+        w.ShowDialog();
+        if (w.Changed) Refresh();
+    }
+
+    void More_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { ContextMenu: { } menu } b)
+        {
+            menu.PlacementTarget = b;
+            menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            menu.DataContext = b.DataContext;
+            menu.IsOpen = true;
+        }
+    }
+
+    void Forced_Click(object sender, RoutedEventArgs e)
+    {
+        var app = Ui.Item<InstalledApp>(sender);
+        if (app == null) return;
+        if (!Ui.Confirm($"Forced uninstall of \"{app.Name}\"?\n\nKemptly won't run the app's own uninstaller. Instead it looks for the app's folders, " +
+                        "registry keys, shortcuts, startup entries and tasks, and its entry in this list. You review everything before anything is removed.\n\n" +
+                        "Use this only when the normal Uninstall doesn't work.", "Forced uninstall")) return;
+        ShowLeftovers(app, forced: true);
     }
 }

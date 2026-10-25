@@ -11,7 +11,7 @@
         <StackPanel Margin="0,0,0,12">
             <TextBlock Text="Installed Apps" Style="{StaticResource PageTitle}"/>
             <TextBlock Style="{StaticResource Subtle}"
-                       Text="Programs on this PC. Sort by size to find the big ones you no longer use, and remove the extras Windows came with."/>
+                       Text="Programs on this PC. Sort by size to find the big ones you no longer use, and remove the extras Windows came with. After an uninstall, Kemptly looks for what it left behind."/>
         </StackPanel>
 
         <TabControl Grid.Row="1">
@@ -45,12 +45,21 @@
                             <DataGridTextColumn Header="Size" Binding="{Binding SizeText}" SortMemberPath="Size" Width="90" ElementStyle="{StaticResource CellText}"/>
                             <DataGridTextColumn Header="Installed" Binding="{Binding DateText}" SortMemberPath="InstallDate" Width="100" ElementStyle="{StaticResource CellText}"/>
                             <DataGridTextColumn Header="For" Binding="{Binding Scope}" Width="130" ElementStyle="{StaticResource CellText}"/>
-                            <DataGridTemplateColumn Width="170" CanUserSort="False">
+                            <DataGridTemplateColumn Width="206" CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Button Content="Folder" Click="Folder_Click" Padding="8,2" FontSize="12" Margin="0,0,4,0"/>
-                                            <Button Content="Uninstall" Click="Uninstall_Click" Padding="8,2" FontSize="12"/>
+                                            <Button Content="Uninstall" Click="Uninstall_Click" Padding="8,2" FontSize="12" Margin="0,0,4,0"/>
+                                            <Button Click="More_Click" Padding="8,2" FontSize="12" ToolTip="More options"
+                                                    AutomationProperties.Name="More options">
+                                                <TextBlock Text="&#xE712;" Style="{StaticResource Icon}" FontSize="12"/>
+                                                <Button.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Forced uninstall (skip the app's uninstaller)…" Click="Forced_Click"/>
+                                                    </ContextMenu>
+                                                </Button.ContextMenu>
+                                            </Button>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

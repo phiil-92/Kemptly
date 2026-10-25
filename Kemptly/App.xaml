@@ -46,6 +46,22 @@
             <Setter Property="Orientation" Value="Horizontal"/>
         </Style>
 
+        <!-- Selected table rows: a neutral highlight instead of the Windows accent colour, which can make
+             white text and buttons unreadable with light accents. No outline around the clicked cell. -->
+        <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- Vertically centred, trimmed text for DataGrid text columns -->
         <Style x:Key="CellText" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>

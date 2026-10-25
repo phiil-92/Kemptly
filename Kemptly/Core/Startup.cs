@@ -297,6 +297,28 @@ public static class TaskSchedulerReader
         };
     }
 
+    /// <summary>Deletes a task and returns its XML definition, so it can be registered again (undo).</summary>
+    public static string Delete(TaskItem item)
+    {
+        dynamic svc = Connect();
+        dynamic folder = svc.GetFolder(item.FolderPath);
+        string xml = folder.GetTask(item.Name).Xml;
+        folder.DeleteTask(item.Name, 0);
+        return xml;
+    }
+
+    /// <summary>Registers a task again from a saved XML definition.</summary>
+    public static void Restore(string folderPath, string name, string xml)
+    {
+        dynamic svc = Connect();
+        dynamic folder;
+        try { folder = svc.GetFolder(folderPath); }
+        catch { folder = svc.GetFolder("\\").CreateFolder(folderPath, null); }
+        // 6 = create or update; logon type 3 = run as the user/principal stored in the XML (5 = service account like SYSTEM)
+        int logon = xml.Contains("S-1-5-18") || xml.Contains("<UserId>SYSTEM</UserId>") ? 5 : 3;
+        folder.RegisterTask(name, xml, 6, null, null, logon, null);
+    }
+
     public static void SetEnabled(TaskItem item, bool enabled, bool log = true)
     {
         dynamic svc = Connect();

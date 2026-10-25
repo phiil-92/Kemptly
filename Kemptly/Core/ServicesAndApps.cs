@@ -102,6 +102,9 @@ public class InstalledApp
     public string UninstallString { get; init; } = "";
     public string InstallLocation { get; init; } = "";
     public string Scope { get; init; } = "";
+    /// <summary>Where the uninstall entry lives (hive + subkey path).</summary>
+    public RegistryHive Hive { get; init; }
+    public string KeyPath { get; init; } = "";
     public string SizeText => Size > 0 ? Fmt.Bytes(Size) : "";
     public string DateText => InstallDate?.ToString("d") ?? "";
 }
@@ -157,10 +160,24 @@ public static class InstalledApps
                     UninstallString = uninstall,
                     InstallLocation = k.GetValue("InstallLocation")?.ToString()?.Trim('"') ?? "",
                     Scope = scope,
+                    Hive = root.Name == "HKEY_CURRENT_USER" ? RegistryHive.CurrentUser : RegistryHive.LocalMachine,
+                    KeyPath = path + "\\" + sub,
                 });
             }
             catch { }
         }
+    }
+
+    /// <summary>True while the app's uninstall entry still exists (used to notice when its uninstaller has finished).</summary>
+    public static bool StillInstalled(InstalledApp app)
+    {
+        try
+        {
+            using var root = RegistryKey.OpenBaseKey(app.Hive, RegistryView.Registry64);
+            using var k = root.OpenSubKey(app.KeyPath);
+            return k != null;
+        }
+        catch { return true; }
     }
 
     /// <summary>Launches the app's own uninstaller.</summary>

@@ -30,6 +30,10 @@
   `%LOCALAPPDATA%\Kemptly\history.json` and can be undone from the History page where possible.
 - Blocking a program's internet access only creates outbound Windows Firewall rules named "Kemptly block - ...", and
   refuses Windows' own programs.
+- The leftover scan after an uninstall only matches folders and registry keys by the app's exact name. It never offers
+  drive roots, Windows or personal folders (Documents, Desktop, ...), or anything another installed program still uses.
+  Folders go to the Recycle Bin; registry keys and scheduled tasks are exported to `%LOCALAPPDATA%\Kemptly\backups`
+  before they are removed. Items that need administrator rights are removed in one elevated step, after a UAC prompt.
 
 ## Known limitations
 
