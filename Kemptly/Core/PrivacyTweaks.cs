@@ -92,7 +92,14 @@ public static class PrivacyTweaks
                      @"\Microsoft\Windows\Feedback\Siuf\DmClient",
                      @"\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"],
             Note = "Windows Update keeps working. Windows Insider builds need this off. Big Windows updates may turn some tasks back on: check here afterwards." },
+        new() { Id = "defendersamples", Title = "No automatic sample submission in Defender",
+            Description = "Microsoft Defender stops uploading your files to Microsoft for analysis. Scans and protection keep working as before.",
+            // SubmitSamplesConsent: 0 = always ask, 1 = send safe samples automatically (Windows' default), 2 = never send, 3 = send all.
+            Values = [M(DefenderSpynet, "SubmitSamplesConsent", 2, 1)],
+            Note = "Brand-new malware may be caught a little later, because Defender's \"block at first sight\" needs samples. Only applies when Defender is your antivirus." },
     ];
+
+    const string DefenderSpynet = @"SOFTWARE\Microsoft\Windows Defender\Spynet";
 
     static RegistryKey Base(RegistryHive hive) => RegistryKey.OpenBaseKey(hive, RegistryView.Registry64);
 
@@ -107,6 +114,12 @@ public static class PrivacyTweaks
 
     static void Write(RegValue v, int? value)
     {
+        // Defender's own settings are protected by Tamper Protection: only Defender's command may change them.
+        if (v.Hive == RegistryHive.LocalMachine && v.Path == DefenderSpynet)
+        {
+            SetDefenderPreference(v.Name, value ?? v.DefaultValue ?? 1);
+            return;
+        }
         // A service's start type goes through the Service Control Manager, which otherwise only rereads it after a restart.
         if (value != null && v.Hive == RegistryHive.LocalMachine && v.Name == "Start"
             && v.Path.StartsWith(ServicesKey, StringComparison.OrdinalIgnoreCase))
@@ -125,6 +138,26 @@ public static class PrivacyTweaks
             using var key = root.CreateSubKey(v.Path, true);
             key.SetValue(v.Name, value.Value, RegistryValueKind.DWord);
         }
+    }
+
+    /// <summary>Changes a Defender preference with Set-MpPreference (works with Tamper Protection on). Needs admin.</summary>
+    static void SetDefenderPreference(string name, int value)
+    {
+        if (!Admin.IsAdmin) throw new UnauthorizedAccessException("Changing Defender settings needs administrator rights.");
+        if (!System.Text.RegularExpressions.Regex.IsMatch(name, "^[A-Za-z]+$")) throw new ArgumentException("Invalid setting name.");
+        var script = $"$ErrorActionPreference='Stop'; Set-MpPreference -{name} {value}";
+        using var p = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(Shell.SystemTool("powershell.exe"),
+            $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand {Shell.EncodePowerShell(script)}")
+        {
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardError = true,
+            WorkingDirectory = Environment.SystemDirectory,
+        })!;
+        var err = p.StandardError.ReadToEnd();
+        p.WaitForExit();
+        if (p.ExitCode != 0)
+            throw new InvalidOperationException("Defender didn't accept the change. Is Microsoft Defender your antivirus?\n\n" + err.Trim());
     }
 
     public static bool IsApplied(PrivacyTweak t) =>
